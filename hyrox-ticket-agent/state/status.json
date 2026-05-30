@@ -1,13 +1,13 @@
 {
-  "checked_at_utc": "2026-05-30T06:53:10.390861+00:00",
+  "checked_at_utc": "2026-05-30T08:57:41.769147+00:00",
   "event_url": "https://hyroxsa.com/event/hyrox-seoul/",
   "ticket_url": "",
   "target_category": "HYROX DOUBLES MIXED|Doubles Mixed|Open Mixed|Mixed",
   "status": "not_open",
   "category_seen": true,
   "content_hash": "a89c386a28b0df36e54ea7a506c024ff4997e8bfaaccaa69b2e44538f4b20356",
-  "previous_status": null,
-  "page_changed": true,
+  "previous_status": "not_open",
+  "page_changed": false,
   "links": [
     "https://hyroxsa.com/event/hyrox-seoul/",
     "https://hyroxsa.com/event/hyrox-seoul/#en-race-information",
