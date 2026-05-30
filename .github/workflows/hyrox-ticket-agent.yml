@@ -23,6 +23,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Sync latest repository state
+        run: git pull --ff-only origin main
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -38,7 +41,8 @@ jobs:
             git config user.email "hyrox-ticket-agent@users.noreply.github.com"
             git add hyrox-ticket-agent/state/status.json
             git commit -m "Update HYROX Seoul ticket status"
-            git push
+            git pull --rebase origin main
+            git push origin HEAD:main
           else
             echo "No state changes."
           fi

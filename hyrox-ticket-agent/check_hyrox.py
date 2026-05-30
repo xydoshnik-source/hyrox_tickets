@@ -7,6 +7,7 @@ import os
 import pathlib
 import re
 import sys
+import urllib.error
 import urllib.parse
 import urllib.request
 
@@ -147,8 +148,13 @@ def send_telegram(text):
         headers={"Content-Type": "application/json"},
         method="POST",
     )
-    with urllib.request.urlopen(req, timeout=30) as response:
-        print(response.read().decode("utf-8")[:500])
+    try:
+        with urllib.request.urlopen(req, timeout=30) as response:
+            print(response.read().decode("utf-8")[:500])
+    except urllib.error.HTTPError as exc:
+        body = exc.read().decode("utf-8", errors="replace")
+        print(f"Telegram API error {exc.code}: {body}", file=sys.stderr)
+        raise
 
 
 def build_message(status, previous_status, category_seen, links):
@@ -238,4 +244,3 @@ if __name__ == "__main__":
     except Exception as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         raise
-
