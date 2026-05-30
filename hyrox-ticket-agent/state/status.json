@@ -1,23 +1,17 @@
 {
-  "checked_at_utc": "2026-05-30T09:00:18.946702+00:00",
+  "checked_at_utc": "2026-05-30T09:14:00.680280+00:00",
   "event_url": "https://hyroxsa.com/event/hyrox-seoul/",
-  "ticket_url": "",
-  "target_category": "HYROX DOUBLES MIXED|Doubles Mixed|Open Mixed|Mixed",
+  "ticket_url": "https://korea.hyrox.com/event/hyrox-seoul-season-26-27-vthaza?useEmbed=true",
+  "target_category": "HYROX DOUBLES MIXED|Doubles Mixed|Open Mixed",
   "status": "not_open",
   "category_seen": true,
-  "content_hash": "a89c386a28b0df36e54ea7a506c024ff4997e8bfaaccaa69b2e44538f4b20356",
-  "previous_status": "not_open",
-  "page_changed": false,
-  "links": [
-    "https://hyroxsa.com/event/hyrox-seoul/",
-    "https://hyroxsa.com/event/hyrox-seoul/#en-race-information",
-    "https://hyroxsa.com/event/hyrox-seoul/#page-top",
-    "https://hyroxsa.com/event/hyrox-seoul/feed/",
-    "https://hyroxsa.com/race-for-impact-charity-tickets/",
-    "https://hyroxsa.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fhyroxsa.com%2Fevent%2Fhyrox-seoul%2F",
-    "https://hyroxsa.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fhyroxsa.com%2Fevent%2Fhyrox-seoul%2F&format=xml",
-    "https://hyroxsa.com/wp-json/wp/v2/event/21710",
+  "ticket_urls_checked": [
+    "https://korea.hyrox.com/event/hyrox-seoul-season-26-27-vthaza",
+    "https://korea.hyrox.com/event/hyrox-seoul-season-26-27-vthaza#main-container",
     "https://korea.hyrox.com/event/hyrox-seoul-season-26-27-vthaza?useEmbed=true",
-    "https://world.hyatt.com/content/gp/en/landing/hyrox-offer-asia-pacific.html?src=misc_aspac_im_woh_hyrox_oth_promo_other_en_hyrox2026-eventpageslider-seoul-nov26"
-  ]
+    "https://korea.hyrox.com/event/hyrox-seoul-season-26-27-vthaza?useEmbed=true#main-container"
+  ],
+  "content_hash": "b54ab2d5451fd0ac6f08c7f2f17257d772b14fdd9c3349b197dae0ffd409cba3",
+  "previous_status": "not_open",
+  "page_changed": true
 }
