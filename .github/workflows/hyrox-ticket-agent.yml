@@ -2,7 +2,7 @@ name: HYROX Seoul Ticket Watcher
 
 on:
   schedule:
-    - cron: "15 6,18 * * *"
+    - cron: "0 8,17 * * *"
   workflow_dispatch:
 
 permissions:
