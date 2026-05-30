@@ -18,7 +18,7 @@ STATE_PATH = STATE_DIR / "status.json"
 
 
 DEFAULT_EVENT_URL = "https://hyroxsa.com/event/hyrox-seoul/"
-DEFAULT_TARGET_CATEGORY = r"HYROX DOUBLES MIXED|Doubles Mixed|Open Mixed|Mixed"
+DEFAULT_TARGET_CATEGORY = r"HYROX DOUBLES MIXED|Doubles Mixed|Open Mixed"
 
 
 def env(name, default=""):
@@ -67,6 +67,15 @@ def find_links(raw, base_url):
         if any(word in full.lower() for word in ["ticket", "register", "booking", "checkout", "event"]):
             links.append(full)
     return sorted(set(links))
+
+
+def find_ticket_urls(links):
+    ticket_urls = []
+    for link in links:
+        lowered = link.lower()
+        if "korea.hyrox.com/event/" in lowered:
+            ticket_urls.append(link)
+    return sorted(set(ticket_urls))
 
 
 def has(pattern, text):
@@ -157,7 +166,7 @@ def send_telegram(text):
         raise
 
 
-def build_message(status, previous_status, category_seen, links):
+def build_message(status, previous_status, category_seen, ticket_urls):
     status_ru = {
         "available": "билеты выглядят доступными",
         "maybe_available": "появился сигнал, что продажи могли открыться",
@@ -166,22 +175,17 @@ def build_message(status, previous_status, category_seen, links):
         "unknown": "статус неясен",
         None: "первый запуск",
     }
+    checked_at = dt.datetime.now(dt.timezone(dt.timedelta(hours=3))).strftime("%d.%m.%Y %H:%M MSK")
+    ticket_url = TICKET_URL or (ticket_urls[0] if ticket_urls else EVENT_URL)
     lines = [
         "HYROX Seoul ticket watcher",
         "",
         f"Статус: {status_ru.get(status, status)}",
-        f"До этого: {status_ru.get(previous_status, previous_status)}",
-        f"Категория найдена на странице: {'да' if category_seen else 'нет'}",
-        "",
-        f"Страница: {EVENT_URL}",
+        "Цель: Open Mixed / Doubles Mixed",
+        f"Категория видна на ticket-странице: {'да' if category_seen else 'нет'}",
+        f"Проверено: {checked_at}",
+        f"Ссылка: {ticket_url}",
     ]
-    if TICKET_URL:
-        lines.append(f"Checkout: {TICKET_URL}")
-    if links:
-        lines.append("")
-        lines.append("Подозрительные ссылки:")
-        for link in links[:5]:
-            lines.append(f"- {link}")
 
     if status in {"available", "maybe_available"}:
         lines.insert(0, "⚡ Возможно, пора покупать HYROX Seoul Open/Mixed.")
@@ -201,9 +205,17 @@ def main():
         raw_parts.append(raw)
         all_links.extend(find_links(raw, url))
 
+    ticket_urls = find_ticket_urls(all_links)
+    for url in ticket_urls:
+        if url not in urls:
+            raw = fetch(url)
+            raw_parts.append(raw)
+            all_links.extend(find_links(raw, url))
+
     raw_all = "\n".join(raw_parts)
     text = normalize(raw_all)
     links = sorted(set(all_links))
+    ticket_urls = sorted(set(ticket_urls + find_ticket_urls(links)))
     status = classify(text, links)
     category_seen = has(TARGET_CATEGORY, text)
     content_hash = hashlib.sha256(text.encode("utf-8")).hexdigest()
@@ -220,10 +232,10 @@ def main():
         "target_category": TARGET_CATEGORY,
         "status": status,
         "category_seen": category_seen,
+        "ticket_urls_checked": ticket_urls,
         "content_hash": content_hash,
         "previous_status": previous_status,
         "page_changed": previous_hash != content_hash,
-        "links": links[:20],
     }
 
     print(json.dumps(state, ensure_ascii=False, indent=2))
@@ -235,7 +247,7 @@ def main():
     save_state(state)
 
     if should_notify:
-        send_telegram(build_message(status, previous_status, category_seen, links))
+        send_telegram(build_message(status, previous_status, category_seen, ticket_urls))
 
 
 if __name__ == "__main__":

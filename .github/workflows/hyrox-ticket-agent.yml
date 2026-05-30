@@ -13,8 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       HYROX_EVENT_URL: "https://hyroxsa.com/event/hyrox-seoul/"
-      HYROX_TICKET_URL: ""
-      TARGET_CATEGORY: "HYROX DOUBLES MIXED|Doubles Mixed|Open Mixed|Mixed"
+      HYROX_TICKET_URL: "https://korea.hyrox.com/event/hyrox-seoul-season-26-27-vthaza?useEmbed=true"
+      TARGET_CATEGORY: "HYROX DOUBLES MIXED|Doubles Mixed|Open Mixed"
       TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
       TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
       NOTIFY_EVERY_RUN: ${{ secrets.NOTIFY_EVERY_RUN }}
