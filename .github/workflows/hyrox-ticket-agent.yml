@@ -1,0 +1,44 @@
+name: HYROX Seoul Ticket Watcher
+
+on:
+  schedule:
+    - cron: "15 6,18 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    env:
+      HYROX_EVENT_URL: "https://hyroxsa.com/event/hyrox-seoul/"
+      HYROX_TICKET_URL: ""
+      TARGET_CATEGORY: "HYROX DOUBLES MIXED|Doubles Mixed|Open Mixed|Mixed"
+      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      NOTIFY_EVERY_RUN: ${{ secrets.NOTIFY_EVERY_RUN }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Check HYROX Seoul tickets
+        run: python hyrox-ticket-agent/check_hyrox.py
+
+      - name: Commit state if changed
+        run: |
+          if [[ -n "$(git status --porcelain hyrox-ticket-agent/state/status.json)" ]]; then
+            git config user.name "hyrox-ticket-agent"
+            git config user.email "hyrox-ticket-agent@users.noreply.github.com"
+            git add hyrox-ticket-agent/state/status.json
+            git commit -m "Update HYROX Seoul ticket status"
+            git push
+          else
+            echo "No state changes."
+          fi
