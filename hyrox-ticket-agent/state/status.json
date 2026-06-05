@@ -1,5 +1,5 @@
 {
-  "checked_at_utc": "2026-06-04T17:58:06.307890+00:00",
+  "checked_at_utc": "2026-06-05T17:03:25.123386+00:00",
   "event_url": "https://hyroxsa.com/event/hyrox-seoul/",
   "ticket_url": "https://korea.hyrox.com/event/hyrox-seoul-season-26-27-vthaza?useEmbed=true",
   "target_category": "HYROX DOUBLES MIXED|Doubles Mixed|Open Mixed",
@@ -11,7 +11,7 @@
     "https://korea.hyrox.com/event/hyrox-seoul-season-26-27-vthaza?useEmbed=true",
     "https://korea.hyrox.com/event/hyrox-seoul-season-26-27-vthaza?useEmbed=true#main-container"
   ],
-  "content_hash": "280336261c09ddab42fca177af38abbf902d44451305faa997b65dad3f2dd81f",
+  "content_hash": "ab31d46bf5b39683489a9f0159508b28278c7a284c171c70cf4e2cc9343307aa",
   "previous_status": "not_open",
   "page_changed": true
 }
