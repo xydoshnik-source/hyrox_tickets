@@ -1,23 +1,45 @@
 {
-  "checked_at_utc": "2026-05-30T06:53:10.390861+00:00",
-  "event_url": "https://hyroxsa.com/event/hyrox-seoul/",
-  "ticket_url": "",
-  "target_category": "HYROX DOUBLES MIXED|Doubles Mixed|Open Mixed|Mixed",
-  "status": "not_open",
-  "category_seen": true,
-  "content_hash": "a89c386a28b0df36e54ea7a506c024ff4997e8bfaaccaa69b2e44538f4b20356",
-  "previous_status": null,
-  "page_changed": true,
-  "links": [
-    "https://hyroxsa.com/event/hyrox-seoul/",
-    "https://hyroxsa.com/event/hyrox-seoul/#en-race-information",
-    "https://hyroxsa.com/event/hyrox-seoul/#page-top",
-    "https://hyroxsa.com/event/hyrox-seoul/feed/",
-    "https://hyroxsa.com/race-for-impact-charity-tickets/",
-    "https://hyroxsa.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fhyroxsa.com%2Fevent%2Fhyrox-seoul%2F",
-    "https://hyroxsa.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fhyroxsa.com%2Fevent%2Fhyrox-seoul%2F&format=xml",
-    "https://hyroxsa.com/wp-json/wp/v2/event/21710",
-    "https://korea.hyrox.com/event/hyrox-seoul-season-26-27-vthaza?useEmbed=true",
-    "https://world.hyatt.com/content/gp/en/landing/hyrox-offer-asia-pacific.html?src=misc_aspac_im_woh_hyrox_oth_promo_other_en_hyrox2026-eventpageslider-seoul-nov26"
-  ]
+  "checked_at_utc": "2026-06-14T21:08:39.907268+00:00",
+  "watches": {
+    "seoul": {
+      "id": "seoul",
+      "name": "Seoul",
+      "date_label": "14-15 Nov 2026",
+      "target_label": "Open Mixed / Doubles Mixed",
+      "event_url": "https://hyroxsa.com/event/hyrox-seoul/",
+      "ticket_url": "https://korea.hyrox.com/event/hyrox-seoul-season-26-27-vthaza?useEmbed=true",
+      "target_category": "HYROX DOUBLES MIXED|Doubles Mixed|Open Mixed",
+      "status": "not_open",
+      "category_seen": true,
+      "ticket_urls_checked": [
+        "https://korea.hyrox.com/event/hyrox-seoul-season-26-27-vthaza",
+        "https://korea.hyrox.com/event/hyrox-seoul-season-26-27-vthaza#main-container",
+        "https://korea.hyrox.com/event/hyrox-seoul-season-26-27-vthaza?useEmbed=true",
+        "https://korea.hyrox.com/event/hyrox-seoul-season-26-27-vthaza?useEmbed=true#main-container"
+      ],
+      "content_hash": "ab31d46bf5b39683489a9f0159508b28278c7a284c171c70cf4e2cc9343307aa",
+      "previous_status": null,
+      "page_changed": true
+    },
+    "bangkok": {
+      "id": "bangkok",
+      "name": "Bangkok",
+      "date_label": "14 Aug 2026",
+      "target_label": "Open Men",
+      "event_url": "https://hyrox.com/event/hyrox-bangkok-2/",
+      "ticket_url": "https://thailand.hyrox.com/event/hyrox-bangkok-season-26-27-3fhlh8?useEmbed=true",
+      "target_category": "HYROX MEN OPEN|Open Men|Men Open",
+      "status": "not_open",
+      "category_seen": true,
+      "ticket_urls_checked": [
+        "https://thailand.hyrox.com/event/hyrox-bangkok-season-26-27-3fhlh8",
+        "https://thailand.hyrox.com/event/hyrox-bangkok-season-26-27-3fhlh8#main-container",
+        "https://thailand.hyrox.com/event/hyrox-bangkok-season-26-27-3fhlh8?useEmbed=true",
+        "https://thailand.hyrox.com/event/hyrox-bangkok-season-26-27-3fhlh8?useEmbed=true#main-container"
+      ],
+      "content_hash": "03db5548f11028f282282faa93d2a1faa01655e653aa172544bb0f57b02f7f08",
+      "previous_status": null,
+      "page_changed": true
+    }
+  }
 }
