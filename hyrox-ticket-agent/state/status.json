@@ -1,5 +1,5 @@
 {
-  "checked_at_utc": "2026-06-14T21:08:39.907268+00:00",
+  "checked_at_utc": "2026-06-14T21:31:21.584403+00:00",
   "watches": {
     "seoul": {
       "id": "seoul",
@@ -18,8 +18,8 @@
         "https://korea.hyrox.com/event/hyrox-seoul-season-26-27-vthaza?useEmbed=true#main-container"
       ],
       "content_hash": "ab31d46bf5b39683489a9f0159508b28278c7a284c171c70cf4e2cc9343307aa",
-      "previous_status": null,
-      "page_changed": true
+      "previous_status": "not_open",
+      "page_changed": false
     },
     "bangkok": {
       "id": "bangkok",
@@ -38,8 +38,8 @@
         "https://thailand.hyrox.com/event/hyrox-bangkok-season-26-27-3fhlh8?useEmbed=true#main-container"
       ],
       "content_hash": "03db5548f11028f282282faa93d2a1faa01655e653aa172544bb0f57b02f7f08",
-      "previous_status": null,
-      "page_changed": true
+      "previous_status": "not_open",
+      "page_changed": false
     }
   }
 }
