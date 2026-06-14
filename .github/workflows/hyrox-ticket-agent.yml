@@ -1,4 +1,4 @@
-name: HYROX Seoul Ticket Watcher
+name: HYROX Ticket Watcher
 
 on:
   schedule:

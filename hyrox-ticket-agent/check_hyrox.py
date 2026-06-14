@@ -17,20 +17,42 @@ STATE_DIR = ROOT / "state"
 STATE_PATH = STATE_DIR / "status.json"
 
 
-DEFAULT_EVENT_URL = "https://hyroxsa.com/event/hyrox-seoul/"
-DEFAULT_TARGET_CATEGORY = r"HYROX DOUBLES MIXED|Doubles Mixed|Open Mixed"
-
-
 def env(name, default=""):
     return os.getenv(name, default).strip()
 
 
-EVENT_URL = env("HYROX_EVENT_URL", DEFAULT_EVENT_URL)
-TICKET_URL = env("HYROX_TICKET_URL", "")
-TARGET_CATEGORY = env("TARGET_CATEGORY", DEFAULT_TARGET_CATEGORY)
 TELEGRAM_BOT_TOKEN = env("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = env("TELEGRAM_CHAT_ID")
 NOTIFY_EVERY_RUN = env("NOTIFY_EVERY_RUN", "").lower() in {"1", "true", "yes"}
+
+WATCHES = [
+    {
+        "id": "seoul",
+        "name": "Seoul",
+        "date_label": "14-15 Nov 2026",
+        "target_label": "Open Mixed / Doubles Mixed",
+        "event_url": env("SEOUL_EVENT_URL", "https://hyroxsa.com/event/hyrox-seoul/"),
+        "ticket_url": env(
+            "SEOUL_TICKET_URL",
+            "https://korea.hyrox.com/event/hyrox-seoul-season-26-27-vthaza?useEmbed=true",
+        ),
+        "target_category": env("SEOUL_TARGET_CATEGORY", r"HYROX DOUBLES MIXED|Doubles Mixed|Open Mixed"),
+        "ticket_url_pattern": r"korea\.hyrox\.com/event/",
+    },
+    {
+        "id": "bangkok",
+        "name": "Bangkok",
+        "date_label": "14 Aug 2026",
+        "target_label": "Open Men",
+        "event_url": env("BANGKOK_EVENT_URL", "https://hyrox.com/event/hyrox-bangkok-2/"),
+        "ticket_url": env(
+            "BANGKOK_TICKET_URL",
+            "https://thailand.hyrox.com/event/hyrox-bangkok-season-26-27-3fhlh8?useEmbed=true",
+        ),
+        "target_category": env("BANGKOK_TARGET_CATEGORY", r"HYROX MEN OPEN|Open Men|Men Open"),
+        "ticket_url_pattern": r"thailand\.hyrox\.com/event/",
+    },
+]
 
 
 def fetch(url):
@@ -69,11 +91,10 @@ def find_links(raw, base_url):
     return sorted(set(links))
 
 
-def find_ticket_urls(links):
+def find_ticket_urls(links, ticket_url_pattern):
     ticket_urls = []
     for link in links:
-        lowered = link.lower()
-        if "korea.hyrox.com/event/" in lowered:
+        if re.search(ticket_url_pattern, link, flags=re.I):
             ticket_urls.append(link)
     return sorted(set(ticket_urls))
 
@@ -82,9 +103,9 @@ def has(pattern, text):
     return re.search(pattern, text, flags=re.I) is not None
 
 
-def classify(text, links):
+def classify(text, links, target_category):
     lowered = text.lower()
-    category_seen = has(TARGET_CATEGORY, text)
+    category_seen = has(target_category, text)
 
     not_open_markers = [
         "ticket sales start soon",
@@ -96,6 +117,7 @@ def classify(text, links):
     ]
     sold_out_markers = [
         "sold out",
+        "sale has ended",
         "currently unavailable",
         "no tickets available",
         "not available",
@@ -105,6 +127,7 @@ def classify(text, links):
         "get your ticket",
         "buy ticket",
         "buy tickets",
+        "buy tickets here",
         "register now",
         "book now",
         "purchase",
@@ -166,37 +189,10 @@ def send_telegram(text):
         raise
 
 
-def build_message(status, previous_status, category_seen, ticket_urls):
-    status_ru = {
-        "available": "билеты выглядят доступными",
-        "maybe_available": "появился сигнал, что продажи могли открыться",
-        "not_open": "продажи ещё не открыты",
-        "sold_out": "похоже, распродано",
-        "unknown": "статус неясен",
-        None: "первый запуск",
-    }
-    checked_at = dt.datetime.now(dt.timezone(dt.timedelta(hours=3))).strftime("%d.%m.%Y %H:%M MSK")
-    ticket_url = TICKET_URL or (ticket_urls[0] if ticket_urls else EVENT_URL)
-    lines = [
-        "HYROX Seoul ticket watcher",
-        "",
-        f"Статус: {status_ru.get(status, status)}",
-        "Цель: Open Mixed / Doubles Mixed",
-        f"Категория видна на ticket-странице: {'да' if category_seen else 'нет'}",
-        f"Проверено: {checked_at}",
-        f"Ссылка: {ticket_url}",
-    ]
-
-    if status in {"available", "maybe_available"}:
-        lines.insert(0, "⚡ Возможно, пора покупать HYROX Seoul Open/Mixed.")
-
-    return "\n".join(lines)
-
-
-def main():
-    urls = [EVENT_URL]
-    if TICKET_URL:
-        urls.append(TICKET_URL)
+def check_watch(watch, previous_watch):
+    urls = [watch["event_url"]]
+    if watch.get("ticket_url"):
+        urls.append(watch["ticket_url"])
 
     raw_parts = []
     all_links = []
@@ -205,7 +201,7 @@ def main():
         raw_parts.append(raw)
         all_links.extend(find_links(raw, url))
 
-    ticket_urls = find_ticket_urls(all_links)
+    ticket_urls = find_ticket_urls(all_links, watch["ticket_url_pattern"])
     for url in ticket_urls:
         if url not in urls:
             raw = fetch(url)
@@ -215,39 +211,97 @@ def main():
     raw_all = "\n".join(raw_parts)
     text = normalize(raw_all)
     links = sorted(set(all_links))
-    ticket_urls = sorted(set(ticket_urls + find_ticket_urls(links)))
-    status = classify(text, links)
-    category_seen = has(TARGET_CATEGORY, text)
+    ticket_urls = sorted(set(ticket_urls + find_ticket_urls(links, watch["ticket_url_pattern"])))
+    status = classify(text, links, watch["target_category"])
+    category_seen = has(watch["target_category"], text)
     content_hash = hashlib.sha256(text.encode("utf-8")).hexdigest()
 
-    previous = load_state()
-    previous_status = previous.get("status")
-    previous_hash = previous.get("content_hash")
-
-    now = dt.datetime.now(dt.timezone.utc).isoformat()
-    state = {
-        "checked_at_utc": now,
-        "event_url": EVENT_URL,
-        "ticket_url": TICKET_URL,
-        "target_category": TARGET_CATEGORY,
+    return {
+        "id": watch["id"],
+        "name": watch["name"],
+        "date_label": watch["date_label"],
+        "target_label": watch["target_label"],
+        "event_url": watch["event_url"],
+        "ticket_url": watch.get("ticket_url", ""),
+        "target_category": watch["target_category"],
         "status": status,
         "category_seen": category_seen,
         "ticket_urls_checked": ticket_urls,
         "content_hash": content_hash,
-        "previous_status": previous_status,
-        "page_changed": previous_hash != content_hash,
+        "previous_status": previous_watch.get("status"),
+        "page_changed": previous_watch.get("content_hash") != content_hash,
+    }
+
+
+def should_notify_watch(result):
+    previous_status = result.get("previous_status")
+    status = result["status"]
+    if NOTIFY_EVERY_RUN:
+        return True
+    if status in {"available", "maybe_available"} and status != previous_status:
+        return True
+    if previous_status in {None, "not_open", "sold_out", "unknown"} and status == "available":
+        return True
+    return False
+
+
+def status_text(status):
+    return {
+        "available": "билеты выглядят доступными",
+        "maybe_available": "появился сигнал, что продажи могли открыться",
+        "not_open": "продажи ещё не открыты",
+        "sold_out": "похоже, распродано",
+        "unknown": "статус неясен",
+        None: "первый запуск",
+    }.get(status, status)
+
+
+def build_message(results):
+    checked_at = dt.datetime.now(dt.timezone(dt.timedelta(hours=3))).strftime("%d.%m.%Y %H:%M MSK")
+    has_buy_signal = any(result["status"] in {"available", "maybe_available"} for result in results)
+    lines = ["HYROX ticket watcher"]
+
+    if has_buy_signal:
+        lines.insert(0, "⚡ Есть сигнал по билетам HYROX.")
+
+    for result in results:
+        ticket_url = result["ticket_url"] or (result["ticket_urls_checked"][0] if result["ticket_urls_checked"] else result["event_url"])
+        lines.extend(
+            [
+                "",
+                f"{result['name']} — {result['date_label']}",
+                f"Цель: {result['target_label']}",
+                f"Статус: {status_text(result['status'])}",
+                f"Категория видна на ticket-странице: {'да' if result['category_seen'] else 'нет'}",
+                f"Ссылка: {ticket_url}",
+            ]
+        )
+
+    lines.extend(["", f"Проверено: {checked_at}"])
+    return "\n".join(lines)
+
+
+def main():
+    previous = load_state()
+    previous_watches = previous.get("watches", {})
+
+    results = []
+    for watch in WATCHES:
+        result = check_watch(watch, previous_watches.get(watch["id"], {}))
+        results.append(result)
+
+    now = dt.datetime.now(dt.timezone.utc).isoformat()
+    state = {
+        "checked_at_utc": now,
+        "watches": {result["id"]: result for result in results},
     }
 
     print(json.dumps(state, ensure_ascii=False, indent=2))
 
-    should_notify = NOTIFY_EVERY_RUN
-    should_notify = should_notify or status in {"available", "maybe_available"} and status != previous_status
-    should_notify = should_notify or previous_status in {None, "not_open", "sold_out", "unknown"} and status == "available"
-
     save_state(state)
 
-    if should_notify:
-        send_telegram(build_message(status, previous_status, category_seen, ticket_urls))
+    if any(should_notify_watch(result) for result in results):
+        send_telegram(build_message(results))
 
 
 if __name__ == "__main__":
