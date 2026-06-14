@@ -247,19 +247,34 @@ def should_notify_watch(result):
 
 def status_text(status):
     return {
-        "available": "билеты выглядят доступными",
-        "maybe_available": "появился сигнал, что продажи могли открыться",
-        "not_open": "продажи ещё не открыты",
-        "sold_out": "похоже, распродано",
-        "unknown": "статус неясен",
-        None: "первый запуск",
+        "available": "✅ ДОСТУПНЫ",
+        "maybe_available": "⚠️ ВОЗМОЖНО ОТКРЫЛИСЬ",
+        "not_open": "❌ НЕ ОТКРЫТЫ",
+        "sold_out": "⛔ РАСПРОДАНО",
+        "unknown": "❔ НЕЯСНО",
+        None: "❔ ПЕРВЫЙ ЗАПУСК",
     }.get(status, status)
+
+
+def summary_status(results):
+    if any(result["status"] == "available" for result in results):
+        return "✅ есть доступные билеты"
+    if any(result["status"] == "maybe_available" for result in results):
+        return "⚠️ есть возможный сигнал"
+    if all(result["status"] == "not_open" for result in results):
+        return "❌ продажи ещё не открыты"
+    if all(result["status"] == "sold_out" for result in results):
+        return "⛔ всё выглядит распроданным"
+    return "❔ статус нужно посмотреть"
 
 
 def build_message(results):
     checked_at = dt.datetime.now(dt.timezone(dt.timedelta(hours=3))).strftime("%d.%m.%Y %H:%M MSK")
     has_buy_signal = any(result["status"] in {"available", "maybe_available"} for result in results)
-    lines = ["HYROX ticket watcher"]
+    lines = [
+        f"HYROX ticket watcher — {summary_status(results)}",
+        f"Проверено: {checked_at}",
+    ]
 
     if has_buy_signal:
         lines.insert(0, "⚡ Есть сигнал по билетам HYROX.")
@@ -269,15 +284,14 @@ def build_message(results):
         lines.extend(
             [
                 "",
-                f"{result['name']} — {result['date_label']}",
-                f"Цель: {result['target_label']}",
-                f"Статус: {status_text(result['status'])}",
-                f"Категория видна на ticket-странице: {'да' if result['category_seen'] else 'нет'}",
+                f"{status_text(result['status'])} — {result['name']}",
+                f"Дата: {result['date_label']}",
+                f"Категория: {result['target_label']}",
+                f"Категория на странице: {'да' if result['category_seen'] else 'нет'}",
                 f"Ссылка: {ticket_url}",
             ]
         )
 
-    lines.extend(["", f"Проверено: {checked_at}"])
     return "\n".join(lines)
 
 
