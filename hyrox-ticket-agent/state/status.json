@@ -1,5 +1,5 @@
 {
-  "checked_at_utc": "2026-06-21T22:00:13.725786+00:00",
+  "checked_at_utc": "2026-06-22T19:58:59.617295+00:00",
   "watches": {
     "seoul": {
       "id": "seoul",
@@ -40,6 +40,36 @@
       "content_hash": "03db5548f11028f282282faa93d2a1faa01655e653aa172544bb0f57b02f7f08",
       "previous_status": "not_open",
       "page_changed": false
+    },
+    "shanghai_doubles_mixed": {
+      "id": "shanghai_doubles_mixed",
+      "name": "Shanghai Doubles Mixed",
+      "date_label": "31 Oct - 1 Nov 2026",
+      "target_label": "Doubles Mixed",
+      "event_url": "https://hyrox.com/event/hyrox-shanghai-1031/",
+      "ticket_url": "",
+      "target_category": "HYROX DOUBLES MIXED|Doubles Mixed|Mixed Doubles|Open Mixed",
+      "status": "not_open",
+      "category_seen": false,
+      "ticket_urls_checked": [],
+      "content_hash": "e1fed4aebd6de24dbaeb44a0766b3ecf47ffb322909f946ec96ecbc92d49c4cf",
+      "previous_status": null,
+      "page_changed": true
+    },
+    "shanghai_open_men": {
+      "id": "shanghai_open_men",
+      "name": "Shanghai Open Men",
+      "date_label": "31 Oct - 1 Nov 2026",
+      "target_label": "Open Men",
+      "event_url": "https://hyrox.com/event/hyrox-shanghai-1031/",
+      "ticket_url": "",
+      "target_category": "HYROX MEN OPEN|Open Men|Men Open",
+      "status": "not_open",
+      "category_seen": false,
+      "ticket_urls_checked": [],
+      "content_hash": "e1fed4aebd6de24dbaeb44a0766b3ecf47ffb322909f946ec96ecbc92d49c4cf",
+      "previous_status": null,
+      "page_changed": true
     }
   }
 }
