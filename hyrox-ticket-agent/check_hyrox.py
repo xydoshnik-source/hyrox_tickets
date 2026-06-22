@@ -52,6 +52,29 @@ WATCHES = [
         "target_category": env("BANGKOK_TARGET_CATEGORY", r"HYROX MEN OPEN|Open Men|Men Open"),
         "ticket_url_pattern": r"thailand\.hyrox\.com/event/",
     },
+    {
+        "id": "shanghai_doubles_mixed",
+        "name": "Shanghai Doubles Mixed",
+        "date_label": "31 Oct - 1 Nov 2026",
+        "target_label": "Doubles Mixed",
+        "event_url": env("SHANGHAI_EVENT_URL", "https://hyrox.com/event/hyrox-shanghai-1031/"),
+        "ticket_url": env("SHANGHAI_DOUBLES_MIXED_TICKET_URL", ""),
+        "target_category": env(
+            "SHANGHAI_DOUBLES_MIXED_TARGET_CATEGORY",
+            r"HYROX DOUBLES MIXED|Doubles Mixed|Mixed Doubles|Open Mixed",
+        ),
+        "ticket_url_pattern": r"china\.hyrox\.com/event/",
+    },
+    {
+        "id": "shanghai_open_men",
+        "name": "Shanghai Open Men",
+        "date_label": "31 Oct - 1 Nov 2026",
+        "target_label": "Open Men",
+        "event_url": env("SHANGHAI_EVENT_URL", "https://hyrox.com/event/hyrox-shanghai-1031/"),
+        "ticket_url": env("SHANGHAI_OPEN_MEN_TICKET_URL", ""),
+        "target_category": env("SHANGHAI_OPEN_MEN_TARGET_CATEGORY", r"HYROX MEN OPEN|Open Men|Men Open"),
+        "ticket_url_pattern": r"china\.hyrox\.com/event/",
+    },
 ]
 
 
