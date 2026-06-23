@@ -1,5 +1,5 @@
 {
-  "checked_at_utc": "2026-06-22T19:58:59.617295+00:00",
+  "checked_at_utc": "2026-06-23T17:05:38.363320+00:00",
   "watches": {
     "seoul": {
       "id": "seoul",
@@ -53,8 +53,8 @@
       "category_seen": false,
       "ticket_urls_checked": [],
       "content_hash": "e1fed4aebd6de24dbaeb44a0766b3ecf47ffb322909f946ec96ecbc92d49c4cf",
-      "previous_status": null,
-      "page_changed": true
+      "previous_status": "not_open",
+      "page_changed": false
     },
     "shanghai_open_men": {
       "id": "shanghai_open_men",
@@ -68,8 +68,8 @@
       "category_seen": false,
       "ticket_urls_checked": [],
       "content_hash": "e1fed4aebd6de24dbaeb44a0766b3ecf47ffb322909f946ec96ecbc92d49c4cf",
-      "previous_status": null,
-      "page_changed": true
+      "previous_status": "not_open",
+      "page_changed": false
     }
   }
 }
