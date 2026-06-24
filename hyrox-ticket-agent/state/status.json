@@ -1,5 +1,5 @@
 {
-  "checked_at_utc": "2026-06-23T17:05:38.363320+00:00",
+  "checked_at_utc": "2026-06-24T16:35:40.898920+00:00",
   "watches": {
     "seoul": {
       "id": "seoul",
@@ -17,9 +17,9 @@
         "https://korea.hyrox.com/event/hyrox-seoul-season-26-27-vthaza?useEmbed=true",
         "https://korea.hyrox.com/event/hyrox-seoul-season-26-27-vthaza?useEmbed=true#main-container"
       ],
-      "content_hash": "8585991cfeeba819bbe95d65be9643df2ce4ce9379cba15c31867ed138b5b1d9",
+      "content_hash": "d9a033505faa4a34cd81c44715435ddd68418c2b173076398dca9374a5860357",
       "previous_status": "not_open",
-      "page_changed": false
+      "page_changed": true
     },
     "bangkok": {
       "id": "bangkok",
@@ -37,9 +37,9 @@
         "https://thailand.hyrox.com/event/hyrox-bangkok-season-26-27-3fhlh8?useEmbed=true",
         "https://thailand.hyrox.com/event/hyrox-bangkok-season-26-27-3fhlh8?useEmbed=true#main-container"
       ],
-      "content_hash": "03db5548f11028f282282faa93d2a1faa01655e653aa172544bb0f57b02f7f08",
+      "content_hash": "41963f21346722fbefbafe608417d58aa99a7443c993d68b36961798b099bbc9",
       "previous_status": "not_open",
-      "page_changed": false
+      "page_changed": true
     },
     "shanghai_doubles_mixed": {
       "id": "shanghai_doubles_mixed",
@@ -52,9 +52,9 @@
       "status": "not_open",
       "category_seen": false,
       "ticket_urls_checked": [],
-      "content_hash": "e1fed4aebd6de24dbaeb44a0766b3ecf47ffb322909f946ec96ecbc92d49c4cf",
+      "content_hash": "cad0cd0f1911acecc22f8cd40f2cdb60a228adf8f1165015c9ed0f894f79737e",
       "previous_status": "not_open",
-      "page_changed": false
+      "page_changed": true
     },
     "shanghai_open_men": {
       "id": "shanghai_open_men",
@@ -67,9 +67,9 @@
       "status": "not_open",
       "category_seen": false,
       "ticket_urls_checked": [],
-      "content_hash": "e1fed4aebd6de24dbaeb44a0766b3ecf47ffb322909f946ec96ecbc92d49c4cf",
+      "content_hash": "cad0cd0f1911acecc22f8cd40f2cdb60a228adf8f1165015c9ed0f894f79737e",
       "previous_status": "not_open",
-      "page_changed": false
+      "page_changed": true
     }
   }
 }
