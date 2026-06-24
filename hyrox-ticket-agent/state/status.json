@@ -1,5 +1,5 @@
 {
-  "checked_at_utc": "2026-06-24T16:35:40.898920+00:00",
+  "checked_at_utc": "2026-06-24T22:00:10.828654+00:00",
   "watches": {
     "seoul": {
       "id": "seoul",
@@ -17,7 +17,7 @@
         "https://korea.hyrox.com/event/hyrox-seoul-season-26-27-vthaza?useEmbed=true",
         "https://korea.hyrox.com/event/hyrox-seoul-season-26-27-vthaza?useEmbed=true#main-container"
       ],
-      "content_hash": "d9a033505faa4a34cd81c44715435ddd68418c2b173076398dca9374a5860357",
+      "content_hash": "a1886fc15179113e15887ed04c7052a1fc0889da860a139cfe45653e7b6182e8",
       "previous_status": "not_open",
       "page_changed": true
     },
@@ -39,7 +39,7 @@
       ],
       "content_hash": "41963f21346722fbefbafe608417d58aa99a7443c993d68b36961798b099bbc9",
       "previous_status": "not_open",
-      "page_changed": true
+      "page_changed": false
     },
     "shanghai_doubles_mixed": {
       "id": "shanghai_doubles_mixed",
@@ -54,7 +54,7 @@
       "ticket_urls_checked": [],
       "content_hash": "cad0cd0f1911acecc22f8cd40f2cdb60a228adf8f1165015c9ed0f894f79737e",
       "previous_status": "not_open",
-      "page_changed": true
+      "page_changed": false
     },
     "shanghai_open_men": {
       "id": "shanghai_open_men",
@@ -69,7 +69,7 @@
       "ticket_urls_checked": [],
       "content_hash": "cad0cd0f1911acecc22f8cd40f2cdb60a228adf8f1165015c9ed0f894f79737e",
       "previous_status": "not_open",
-      "page_changed": true
+      "page_changed": false
     }
   }
 }
