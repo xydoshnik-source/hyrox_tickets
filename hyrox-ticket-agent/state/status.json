@@ -1,5 +1,5 @@
 {
-  "checked_at_utc": "2026-06-21T22:00:13.725786+00:00",
+  "checked_at_utc": "2026-06-28T12:19:46.068056+00:00",
   "watches": {
     "seoul": {
       "id": "seoul",
@@ -17,7 +17,7 @@
         "https://korea.hyrox.com/event/hyrox-seoul-season-26-27-vthaza?useEmbed=true",
         "https://korea.hyrox.com/event/hyrox-seoul-season-26-27-vthaza?useEmbed=true#main-container"
       ],
-      "content_hash": "8585991cfeeba819bbe95d65be9643df2ce4ce9379cba15c31867ed138b5b1d9",
+      "content_hash": "7e1e8a62d5b1f4f02bb09b513afe578ccb44c752dd773c0e2c3c4c28d767a76c",
       "previous_status": "not_open",
       "page_changed": false
     },
@@ -37,7 +37,37 @@
         "https://thailand.hyrox.com/event/hyrox-bangkok-season-26-27-3fhlh8?useEmbed=true",
         "https://thailand.hyrox.com/event/hyrox-bangkok-season-26-27-3fhlh8?useEmbed=true#main-container"
       ],
-      "content_hash": "03db5548f11028f282282faa93d2a1faa01655e653aa172544bb0f57b02f7f08",
+      "content_hash": "41963f21346722fbefbafe608417d58aa99a7443c993d68b36961798b099bbc9",
+      "previous_status": "not_open",
+      "page_changed": false
+    },
+    "shanghai_doubles_mixed": {
+      "id": "shanghai_doubles_mixed",
+      "name": "Shanghai Doubles Mixed",
+      "date_label": "31 Oct - 1 Nov 2026",
+      "target_label": "Doubles Mixed",
+      "event_url": "https://hyrox.com/event/hyrox-shanghai-1031/",
+      "ticket_url": "",
+      "target_category": "HYROX DOUBLES MIXED|Doubles Mixed|Mixed Doubles|Open Mixed",
+      "status": "not_open",
+      "category_seen": false,
+      "ticket_urls_checked": [],
+      "content_hash": "cad0cd0f1911acecc22f8cd40f2cdb60a228adf8f1165015c9ed0f894f79737e",
+      "previous_status": "not_open",
+      "page_changed": false
+    },
+    "shanghai_open_men": {
+      "id": "shanghai_open_men",
+      "name": "Shanghai Open Men",
+      "date_label": "31 Oct - 1 Nov 2026",
+      "target_label": "Open Men",
+      "event_url": "https://hyrox.com/event/hyrox-shanghai-1031/",
+      "ticket_url": "",
+      "target_category": "HYROX MEN OPEN|Open Men|Men Open",
+      "status": "not_open",
+      "category_seen": false,
+      "ticket_urls_checked": [],
+      "content_hash": "cad0cd0f1911acecc22f8cd40f2cdb60a228adf8f1165015c9ed0f894f79737e",
       "previous_status": "not_open",
       "page_changed": false
     }
