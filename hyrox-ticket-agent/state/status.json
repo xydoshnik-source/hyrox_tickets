@@ -1,5 +1,5 @@
 {
-  "checked_at_utc": "2026-06-28T12:19:46.068056+00:00",
+  "checked_at_utc": "2026-06-28T20:44:58.875867+00:00",
   "watches": {
     "seoul": {
       "id": "seoul",
@@ -17,9 +17,9 @@
         "https://korea.hyrox.com/event/hyrox-seoul-season-26-27-vthaza?useEmbed=true",
         "https://korea.hyrox.com/event/hyrox-seoul-season-26-27-vthaza?useEmbed=true#main-container"
       ],
-      "content_hash": "7e1e8a62d5b1f4f02bb09b513afe578ccb44c752dd773c0e2c3c4c28d767a76c",
+      "content_hash": "3906a202457eca94f9fb0b16d6ce34414a2fb79fd50e6e3493889e5da9bbd5f0",
       "previous_status": "not_open",
-      "page_changed": false
+      "page_changed": true
     },
     "bangkok": {
       "id": "bangkok",
@@ -70,6 +70,36 @@
       "content_hash": "cad0cd0f1911acecc22f8cd40f2cdb60a228adf8f1165015c9ed0f894f79737e",
       "previous_status": "not_open",
       "page_changed": false
+    },
+    "abu_dhabi_doubles_mixed": {
+      "id": "abu_dhabi_doubles_mixed",
+      "name": "Abu Dhabi Doubles Mixed",
+      "date_label": "Date coming soon",
+      "target_label": "Doubles Mixed",
+      "event_url": "https://hyrox.com/event/hyrox-abu-dhabi/",
+      "ticket_url": "",
+      "target_category": "HYROX DOUBLES MIXED|Doubles Mixed|Mixed Doubles|Open Mixed",
+      "status": "not_open",
+      "category_seen": false,
+      "ticket_urls_checked": [],
+      "content_hash": "378aeb6efbba42de3539fa8f4762468c7c4ab06f189f47bc384996ae6fddf2da",
+      "previous_status": null,
+      "page_changed": true
+    },
+    "abu_dhabi_open_men": {
+      "id": "abu_dhabi_open_men",
+      "name": "Abu Dhabi Open Men",
+      "date_label": "Date coming soon",
+      "target_label": "Open Men",
+      "event_url": "https://hyrox.com/event/hyrox-abu-dhabi/",
+      "ticket_url": "",
+      "target_category": "HYROX MEN OPEN|Open Men|Men Open",
+      "status": "not_open",
+      "category_seen": false,
+      "ticket_urls_checked": [],
+      "content_hash": "378aeb6efbba42de3539fa8f4762468c7c4ab06f189f47bc384996ae6fddf2da",
+      "previous_status": null,
+      "page_changed": true
     }
   }
 }
