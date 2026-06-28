@@ -75,6 +75,29 @@ WATCHES = [
         "target_category": env("SHANGHAI_OPEN_MEN_TARGET_CATEGORY", r"HYROX MEN OPEN|Open Men|Men Open"),
         "ticket_url_pattern": r"china\.hyrox\.com/event/",
     },
+    {
+        "id": "abu_dhabi_doubles_mixed",
+        "name": "Abu Dhabi Doubles Mixed",
+        "date_label": "Date coming soon",
+        "target_label": "Doubles Mixed",
+        "event_url": env("ABU_DHABI_EVENT_URL", "https://hyrox.com/event/hyrox-abu-dhabi/"),
+        "ticket_url": env("ABU_DHABI_DOUBLES_MIXED_TICKET_URL", ""),
+        "target_category": env(
+            "ABU_DHABI_DOUBLES_MIXED_TARGET_CATEGORY",
+            r"HYROX DOUBLES MIXED|Doubles Mixed|Mixed Doubles|Open Mixed",
+        ),
+        "ticket_url_pattern": r"b34crwi4\.myrdbx\.io|hyroxme\.com|registration\.hyrox",
+    },
+    {
+        "id": "abu_dhabi_open_men",
+        "name": "Abu Dhabi Open Men",
+        "date_label": "Date coming soon",
+        "target_label": "Open Men",
+        "event_url": env("ABU_DHABI_EVENT_URL", "https://hyrox.com/event/hyrox-abu-dhabi/"),
+        "ticket_url": env("ABU_DHABI_OPEN_MEN_TICKET_URL", ""),
+        "target_category": env("ABU_DHABI_OPEN_MEN_TARGET_CATEGORY", r"HYROX MEN OPEN|Open Men|Men Open"),
+        "ticket_url_pattern": r"b34crwi4\.myrdbx\.io|hyroxme\.com|registration\.hyrox",
+    },
 ]
 
 
@@ -109,7 +132,7 @@ def find_links(raw, base_url):
     for match in re.finditer(r'href=["\']([^"\']+)["\']', raw, flags=re.I):
         href = html.unescape(match.group(1))
         full = urllib.parse.urljoin(base_url, href)
-        if any(word in full.lower() for word in ["ticket", "register", "booking", "checkout", "event"]):
+        if any(word in full.lower() for word in ["ticket", "register", "booking", "checkout", "event", "myrdbx"]):
             links.append(full)
     return sorted(set(links))
 
