@@ -17,7 +17,6 @@ jobs:
       TARGET_CATEGORY: "HYROX DOUBLES MIXED|Doubles Mixed|Open Mixed"
       TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
       TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-      NOTIFY_EVERY_RUN: ${{ secrets.NOTIFY_EVERY_RUN }}
 
     steps:
       - name: Checkout

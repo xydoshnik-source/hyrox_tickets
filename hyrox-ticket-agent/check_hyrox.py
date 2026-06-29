@@ -23,7 +23,6 @@ def env(name, default=""):
 
 TELEGRAM_BOT_TOKEN = env("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = env("TELEGRAM_CHAT_ID")
-NOTIFY_EVERY_RUN = env("NOTIFY_EVERY_RUN", "").lower() in {"1", "true", "yes"}
 
 WATCHES = [
     {
@@ -282,8 +281,6 @@ def check_watch(watch, previous_watch):
 def should_notify_watch(result):
     previous_status = result.get("previous_status")
     status = result["status"]
-    if NOTIFY_EVERY_RUN:
-        return True
     if status in {"available", "maybe_available"} and status != previous_status:
         return True
     if previous_status in {None, "not_open", "sold_out", "unknown"} and status == "available":
