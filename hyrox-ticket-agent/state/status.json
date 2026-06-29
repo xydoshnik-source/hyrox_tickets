@@ -1,5 +1,5 @@
 {
-  "checked_at_utc": "2026-06-28T20:44:58.875867+00:00",
+  "checked_at_utc": "2026-06-29T17:48:49.974995+00:00",
   "watches": {
     "seoul": {
       "id": "seoul",
@@ -17,7 +17,7 @@
         "https://korea.hyrox.com/event/hyrox-seoul-season-26-27-vthaza?useEmbed=true",
         "https://korea.hyrox.com/event/hyrox-seoul-season-26-27-vthaza?useEmbed=true#main-container"
       ],
-      "content_hash": "3906a202457eca94f9fb0b16d6ce34414a2fb79fd50e6e3493889e5da9bbd5f0",
+      "content_hash": "d9a033505faa4a34cd81c44715435ddd68418c2b173076398dca9374a5860357",
       "previous_status": "not_open",
       "page_changed": true
     },
@@ -83,8 +83,8 @@
       "category_seen": false,
       "ticket_urls_checked": [],
       "content_hash": "378aeb6efbba42de3539fa8f4762468c7c4ab06f189f47bc384996ae6fddf2da",
-      "previous_status": null,
-      "page_changed": true
+      "previous_status": "not_open",
+      "page_changed": false
     },
     "abu_dhabi_open_men": {
       "id": "abu_dhabi_open_men",
@@ -98,8 +98,8 @@
       "category_seen": false,
       "ticket_urls_checked": [],
       "content_hash": "378aeb6efbba42de3539fa8f4762468c7c4ab06f189f47bc384996ae6fddf2da",
-      "previous_status": null,
-      "page_changed": true
+      "previous_status": "not_open",
+      "page_changed": false
     }
   }
 }
