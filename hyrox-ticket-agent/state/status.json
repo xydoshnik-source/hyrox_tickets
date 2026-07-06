@@ -1,5 +1,5 @@
 {
-  "checked_at_utc": "2026-07-06T12:11:19.381962+00:00",
+  "checked_at_utc": "2026-07-06T19:01:08.257983+00:00",
   "watches": {
     "seoul": {
       "id": "seoul",
@@ -17,7 +17,7 @@
         "https://korea.hyrox.com/event/hyrox-seoul-season-26-27-vthaza?useEmbed=true",
         "https://korea.hyrox.com/event/hyrox-seoul-season-26-27-vthaza?useEmbed=true#main-container"
       ],
-      "content_hash": "cbe2558921413cad731566c4a1b940537c0920ba5aca40d4c9549f997a45edc5",
+      "content_hash": "6424445721d9467366d3e211083c131c35c4e96465f27f0d4581dba0a478ec09",
       "previous_status": "not_open",
       "page_changed": true
     },
@@ -39,7 +39,7 @@
       ],
       "content_hash": "1d993ea7fc2e8ab2c5e65a9f5432e18e10b9908007e98fc78c3df0fd6c675c18",
       "previous_status": "not_open",
-      "page_changed": true
+      "page_changed": false
     },
     "shanghai_doubles_mixed": {
       "id": "shanghai_doubles_mixed",
@@ -54,7 +54,7 @@
       "ticket_urls_checked": [],
       "content_hash": "4a2881a9b20ddbc523fc16374b86c5a7efcc3378f8b70f13b2f953c16b762657",
       "previous_status": "not_open",
-      "page_changed": true
+      "page_changed": false
     },
     "shanghai_open_men": {
       "id": "shanghai_open_men",
@@ -69,7 +69,7 @@
       "ticket_urls_checked": [],
       "content_hash": "4a2881a9b20ddbc523fc16374b86c5a7efcc3378f8b70f13b2f953c16b762657",
       "previous_status": "not_open",
-      "page_changed": true
+      "page_changed": false
     },
     "abu_dhabi_doubles_mixed": {
       "id": "abu_dhabi_doubles_mixed",
@@ -84,7 +84,7 @@
       "ticket_urls_checked": [],
       "content_hash": "2372aed34deb910e88badecef03148da11985a14922a5281d049196eadcbe3f4",
       "previous_status": "not_open",
-      "page_changed": true
+      "page_changed": false
     },
     "abu_dhabi_open_men": {
       "id": "abu_dhabi_open_men",
@@ -99,7 +99,7 @@
       "ticket_urls_checked": [],
       "content_hash": "2372aed34deb910e88badecef03148da11985a14922a5281d049196eadcbe3f4",
       "previous_status": "not_open",
-      "page_changed": true
+      "page_changed": false
     }
   }
 }
