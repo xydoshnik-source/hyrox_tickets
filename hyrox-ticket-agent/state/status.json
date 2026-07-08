@@ -1,5 +1,5 @@
 {
-  "checked_at_utc": "2026-07-07T19:06:53.172424+00:00",
+  "checked_at_utc": "2026-07-08T10:26:52.610163+00:00",
   "watches": {
     "seoul": {
       "id": "seoul",
@@ -17,7 +17,7 @@
         "https://korea.hyrox.com/event/hyrox-seoul-season-26-27-vthaza?useEmbed=true",
         "https://korea.hyrox.com/event/hyrox-seoul-season-26-27-vthaza?useEmbed=true#main-container"
       ],
-      "content_hash": "52158a764f7535f351ca813bc8d9dea8601688e7ac70dc50e83e5ba2dce04a39",
+      "content_hash": "39006c93f1854278c73406fc672beb32a3dbf4df81f05e409cbfc04cdab84da1",
       "previous_status": "not_open",
       "page_changed": true
     },
