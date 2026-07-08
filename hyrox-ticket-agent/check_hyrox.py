@@ -23,6 +23,7 @@ def env(name, default=""):
 
 TELEGRAM_BOT_TOKEN = env("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = env("TELEGRAM_CHAT_ID")
+FORCE_STATUS_REPORT = env("FORCE_STATUS_REPORT", "").lower() in {"1", "true", "yes"}
 
 WATCHES = [
     {
@@ -357,7 +358,7 @@ def main():
 
     save_state(state)
 
-    if any(should_notify_watch(result) for result in results):
+    if FORCE_STATUS_REPORT or any(should_notify_watch(result) for result in results):
         send_telegram(build_message(results))
 
 
