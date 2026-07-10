@@ -1,5 +1,5 @@
 {
-  "checked_at_utc": "2026-07-09T18:53:04.002280+00:00",
+  "checked_at_utc": "2026-07-10T11:12:37.744709+00:00",
   "watches": {
     "seoul": {
       "id": "seoul",
@@ -17,9 +17,9 @@
         "https://korea.hyrox.com/event/hyrox-seoul-season-26-27-vthaza?useEmbed=true",
         "https://korea.hyrox.com/event/hyrox-seoul-season-26-27-vthaza?useEmbed=true#main-container"
       ],
-      "content_hash": "e0ab88078217de97755c9adf4cde9e751a52619cb9a9fbaaabe07601f38b5d6d",
+      "content_hash": "a293093f36bc0b6499707377ba069fdbbfada847227c835fc19a4121cb40c835",
       "previous_status": "not_open",
-      "page_changed": false
+      "page_changed": true
     },
     "bangkok": {
       "id": "bangkok",
@@ -37,9 +37,9 @@
         "https://thailand.hyrox.com/event/hyrox-bangkok-season-26-27-3fhlh8?useEmbed=true",
         "https://thailand.hyrox.com/event/hyrox-bangkok-season-26-27-3fhlh8?useEmbed=true#main-container"
       ],
-      "content_hash": "1d993ea7fc2e8ab2c5e65a9f5432e18e10b9908007e98fc78c3df0fd6c675c18",
+      "content_hash": "fb90efdd9c705da66fc666f76a1853d9478623f34ca369478dcfd05c2cf9948f",
       "previous_status": "not_open",
-      "page_changed": false
+      "page_changed": true
     },
     "shanghai_doubles_mixed": {
       "id": "shanghai_doubles_mixed",
@@ -52,9 +52,9 @@
       "status": "not_open",
       "category_seen": false,
       "ticket_urls_checked": [],
-      "content_hash": "4a2881a9b20ddbc523fc16374b86c5a7efcc3378f8b70f13b2f953c16b762657",
+      "content_hash": "38f4d81cb6bf3dac309cc0cf3ad89425597956ddd0cd4042592846080b8632b8",
       "previous_status": "not_open",
-      "page_changed": false
+      "page_changed": true
     },
     "shanghai_open_men": {
       "id": "shanghai_open_men",
@@ -67,9 +67,9 @@
       "status": "not_open",
       "category_seen": false,
       "ticket_urls_checked": [],
-      "content_hash": "4a2881a9b20ddbc523fc16374b86c5a7efcc3378f8b70f13b2f953c16b762657",
+      "content_hash": "38f4d81cb6bf3dac309cc0cf3ad89425597956ddd0cd4042592846080b8632b8",
       "previous_status": "not_open",
-      "page_changed": false
+      "page_changed": true
     },
     "abu_dhabi_doubles_mixed": {
       "id": "abu_dhabi_doubles_mixed",
@@ -82,9 +82,9 @@
       "status": "not_open",
       "category_seen": false,
       "ticket_urls_checked": [],
-      "content_hash": "2372aed34deb910e88badecef03148da11985a14922a5281d049196eadcbe3f4",
+      "content_hash": "a14570b5317e2e6c1180ad2cc8b3446f3ac616d82b0caa8787a486b00c65a7b7",
       "previous_status": "not_open",
-      "page_changed": false
+      "page_changed": true
     },
     "abu_dhabi_open_men": {
       "id": "abu_dhabi_open_men",
@@ -97,9 +97,9 @@
       "status": "not_open",
       "category_seen": false,
       "ticket_urls_checked": [],
-      "content_hash": "2372aed34deb910e88badecef03148da11985a14922a5281d049196eadcbe3f4",
+      "content_hash": "a14570b5317e2e6c1180ad2cc8b3446f3ac616d82b0caa8787a486b00c65a7b7",
       "previous_status": "not_open",
-      "page_changed": false
+      "page_changed": true
     }
   }
 }
