@@ -1,5 +1,5 @@
 {
-  "checked_at_utc": "2026-08-22T07:03:37.397978+00:00",
+  "checked_at_utc": "2026-08-22T07:58:07.810895+00:00",
   "watches": {
     "seoul": {
       "id": "seoul",
@@ -18,7 +18,7 @@
       ],
       "content_hash": "614505d70f04546d159df111dd3fbe073967e43ab88fc368bf7622bdb0adf82e",
       "previous_status": "not_open",
-      "page_changed": true
+      "page_changed": false
     },
     "shanghai_open_men": {
       "id": "shanghai_open_men",
@@ -33,7 +33,7 @@
       "ticket_urls_checked": [],
       "content_hash": "f2d70b57bb89e82684ea47a3338ca4e4e047feda8ecf8cb26f9bcc41bdfbffa8",
       "previous_status": "not_open",
-      "page_changed": true
+      "page_changed": false
     },
     "kuala_lumpur_open_men": {
       "id": "kuala_lumpur_open_men",
@@ -51,8 +51,8 @@
         "https://malaysia.hyrox.com/event/hyrox-airasia-kuala-lumpur-season-26-27-gjo5z9?useEmbed=true#main-container"
       ],
       "content_hash": "a08b101bd0ac04996c3ed362c34d73ba4e7ff48df82ac6d3729da31422c00680",
-      "previous_status": null,
-      "page_changed": true
+      "previous_status": "not_open",
+      "page_changed": false
     },
     "beijing_open_men": {
       "id": "beijing_open_men",
@@ -70,8 +70,8 @@
         "https://china.hyrox.com/event/hyrox-beijing-season-26-27-7e3efj?useEmbed=true#main-container"
       ],
       "content_hash": "47d9c8cb42850321d3c21768e79c02e274bf0420a70ce9d45b3845596c6cc4e7",
-      "previous_status": null,
-      "page_changed": true
+      "previous_status": "not_open",
+      "page_changed": false
     }
   }
 }
