@@ -1,5 +1,5 @@
 {
-  "checked_at_utc": "2026-08-24T13:18:17.945811+00:00",
+  "checked_at_utc": "2026-08-24T15:24:25.518986+00:00",
   "watches": {
     "seoul": {
       "id": "seoul",
@@ -33,7 +33,7 @@
       "ticket_urls_checked": [],
       "content_hash": "d418c020054f87e8dd61c420b0007852819fa10e22d799714e5367dffef22330",
       "previous_status": "not_open",
-      "page_changed": true
+      "page_changed": false
     },
     "kuala_lumpur_open_men": {
       "id": "kuala_lumpur_open_men",
@@ -71,7 +71,7 @@
       ],
       "content_hash": "9813750ba13c7642a54751039dec99fd0e542554ce632433d3b9efca152a65b3",
       "previous_status": "not_open",
-      "page_changed": true
+      "page_changed": false
     }
   }
 }
