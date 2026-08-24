@@ -1,5 +1,5 @@
 {
-  "checked_at_utc": "2026-08-24T05:50:14.680123+00:00",
+  "checked_at_utc": "2026-08-24T08:23:44.798444+00:00",
   "watches": {
     "seoul": {
       "id": "seoul",
@@ -71,7 +71,7 @@
       ],
       "content_hash": "b2528f089b33c7a052cdfd66b78daedc58778f1478067ac3cdad1a08352fcc02",
       "previous_status": "not_open",
-      "page_changed": true
+      "page_changed": false
     }
   }
 }
