@@ -1,5 +1,5 @@
 {
-  "checked_at_utc": "2026-08-26T08:21:57.367983+00:00",
+  "checked_at_utc": "2026-08-26T10:34:21.640961+00:00",
   "watches": {
     "seoul": {
       "id": "seoul",
@@ -18,7 +18,7 @@
       ],
       "content_hash": "1f2de246a68f477de2a861014f2e944733c03df791b78da24faa9ca3b58a73c6",
       "previous_status": "not_open",
-      "page_changed": true
+      "page_changed": false
     },
     "shanghai_open_men": {
       "id": "shanghai_open_men",
@@ -33,7 +33,7 @@
       "ticket_urls_checked": [],
       "content_hash": "4b2268ad4a0e99837bbe9056f61e6a506a2d578aab1e4047a0bcdbd9253accb0",
       "previous_status": "not_open",
-      "page_changed": true
+      "page_changed": false
     },
     "kuala_lumpur_open_men": {
       "id": "kuala_lumpur_open_men",
@@ -52,7 +52,7 @@
       ],
       "content_hash": "9f5a3d12dfe8fb642226b6883b4ae4fb3294ba8ceb8ca308322142861ab3e93f",
       "previous_status": "not_open",
-      "page_changed": true
+      "page_changed": false
     },
     "beijing_open_men": {
       "id": "beijing_open_men",
@@ -71,7 +71,7 @@
       ],
       "content_hash": "70640f8899cc0ec3dd54e23d310f30a5973b7dab77c69eaabe0f7d1998a2bdbe",
       "previous_status": "not_open",
-      "page_changed": true
+      "page_changed": false
     }
   }
 }
