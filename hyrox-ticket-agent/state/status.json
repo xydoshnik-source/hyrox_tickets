@@ -1,5 +1,5 @@
 {
-  "checked_at_utc": "2026-08-26T16:06:41.731458+00:00",
+  "checked_at_utc": "2026-08-26T19:17:20.607501+00:00",
   "watches": {
     "seoul": {
       "id": "seoul",
@@ -69,9 +69,9 @@
         "https://china.hyrox.com/event/hyrox-beijing-season-26-27-7e3efj?useEmbed=true",
         "https://china.hyrox.com/event/hyrox-beijing-season-26-27-7e3efj?useEmbed=true#main-container"
       ],
-      "content_hash": "70640f8899cc0ec3dd54e23d310f30a5973b7dab77c69eaabe0f7d1998a2bdbe",
+      "content_hash": "1ebdc4ef3a73580cc63d873153b3b618f2cd85fde70cc4112b7c723518d06d3e",
       "previous_status": "not_open",
-      "page_changed": false
+      "page_changed": true
     }
   }
 }
