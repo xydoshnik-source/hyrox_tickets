@@ -1,5 +1,5 @@
 {
-  "checked_at_utc": "2026-08-26T05:47:00.342434+00:00",
+  "checked_at_utc": "2026-08-26T08:21:57.367983+00:00",
   "watches": {
     "seoul": {
       "id": "seoul",
@@ -16,9 +16,9 @@
         "https://korea.hyrox.com/event/hyrox-seoul-season-26-27-vthaza?useEmbed=true",
         "https://korea.hyrox.com/event/hyrox-seoul-season-26-27-vthaza?useEmbed=true#main-container"
       ],
-      "content_hash": "614505d70f04546d159df111dd3fbe073967e43ab88fc368bf7622bdb0adf82e",
+      "content_hash": "1f2de246a68f477de2a861014f2e944733c03df791b78da24faa9ca3b58a73c6",
       "previous_status": "not_open",
-      "page_changed": false
+      "page_changed": true
     },
     "shanghai_open_men": {
       "id": "shanghai_open_men",
@@ -31,9 +31,9 @@
       "status": "not_open",
       "category_seen": false,
       "ticket_urls_checked": [],
-      "content_hash": "d418c020054f87e8dd61c420b0007852819fa10e22d799714e5367dffef22330",
+      "content_hash": "4b2268ad4a0e99837bbe9056f61e6a506a2d578aab1e4047a0bcdbd9253accb0",
       "previous_status": "not_open",
-      "page_changed": false
+      "page_changed": true
     },
     "kuala_lumpur_open_men": {
       "id": "kuala_lumpur_open_men",
@@ -50,9 +50,9 @@
         "https://malaysia.hyrox.com/event/hyrox-airasia-kuala-lumpur-season-26-27-gjo5z9?useEmbed=true",
         "https://malaysia.hyrox.com/event/hyrox-airasia-kuala-lumpur-season-26-27-gjo5z9?useEmbed=true#main-container"
       ],
-      "content_hash": "a08b101bd0ac04996c3ed362c34d73ba4e7ff48df82ac6d3729da31422c00680",
+      "content_hash": "9f5a3d12dfe8fb642226b6883b4ae4fb3294ba8ceb8ca308322142861ab3e93f",
       "previous_status": "not_open",
-      "page_changed": false
+      "page_changed": true
     },
     "beijing_open_men": {
       "id": "beijing_open_men",
@@ -69,9 +69,9 @@
         "https://china.hyrox.com/event/hyrox-beijing-season-26-27-7e3efj?useEmbed=true",
         "https://china.hyrox.com/event/hyrox-beijing-season-26-27-7e3efj?useEmbed=true#main-container"
       ],
-      "content_hash": "9813750ba13c7642a54751039dec99fd0e542554ce632433d3b9efca152a65b3",
+      "content_hash": "70640f8899cc0ec3dd54e23d310f30a5973b7dab77c69eaabe0f7d1998a2bdbe",
       "previous_status": "not_open",
-      "page_changed": false
+      "page_changed": true
     }
   }
 }
