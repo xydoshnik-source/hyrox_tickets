@@ -1,5 +1,5 @@
 {
-  "checked_at_utc": "2026-08-31T15:24:00.517564+00:00",
+  "checked_at_utc": "2026-08-31T17:24:32.773719+00:00",
   "watches": {
     "seoul": {
       "id": "seoul",
@@ -29,11 +29,11 @@
       "ticket_url": "",
       "target_category": "HYROX MEN OPEN|HYROX MEN|Open Men|Men Open",
       "status": "not_open",
-      "category_seen": false,
+      "category_seen": true,
       "ticket_urls_checked": [],
-      "content_hash": "d418c020054f87e8dd61c420b0007852819fa10e22d799714e5367dffef22330",
+      "content_hash": "bf0972316b8f4bff92b8e296dd6c2438806d47b4cb2a68b8ee181971c9db721f",
       "previous_status": "not_open",
-      "page_changed": false
+      "page_changed": true
     },
     "kuala_lumpur_open_men": {
       "id": "kuala_lumpur_open_men",
