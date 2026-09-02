@@ -1,5 +1,5 @@
 {
-  "checked_at_utc": "2026-09-02T12:16:31.851136+00:00",
+  "checked_at_utc": "2026-09-02T14:07:15.669852+00:00",
   "watches": {
     "seoul": {
       "id": "seoul",
@@ -37,7 +37,7 @@
       ],
       "content_hash": "06f2992367cf41605e430ed1b75e0a1baf7602e133e21f941ef0c512e8012174",
       "previous_status": "not_open",
-      "page_changed": true
+      "page_changed": false
     },
     "kuala_lumpur_open_men": {
       "id": "kuala_lumpur_open_men",
@@ -75,7 +75,7 @@
       ],
       "content_hash": "101150bc4d44c186ee8b0e509d1e1dff24c1d2a2c9745f875258fb5d169a5068",
       "previous_status": "not_open",
-      "page_changed": true
+      "page_changed": false
     }
   }
 }
