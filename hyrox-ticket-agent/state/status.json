@@ -1,5 +1,5 @@
 {
-  "checked_at_utc": "2026-09-02T09:32:54.146556+00:00",
+  "checked_at_utc": "2026-09-02T12:16:31.851136+00:00",
   "watches": {
     "seoul": {
       "id": "seoul",
@@ -30,10 +30,14 @@
       "target_category": "HYROX MEN OPEN|HYROX MEN|Open Men|Men Open",
       "status": "not_open",
       "category_seen": true,
-      "ticket_urls_checked": [],
-      "content_hash": "bf0972316b8f4bff92b8e296dd6c2438806d47b4cb2a68b8ee181971c9db721f",
+      "ticket_urls_checked": [
+        "https://china.hyrox.com/event/hyrox-shanghai-season-26-27-itfsos",
+        "https://china.hyrox.com/event/hyrox-shanghai-season-26-27-itfsos?useEmbed=true",
+        "https://china.hyrox.com/event/hyrox-shanghai-season-26-27-itfsos?useEmbed=true#main-container"
+      ],
+      "content_hash": "06f2992367cf41605e430ed1b75e0a1baf7602e133e21f941ef0c512e8012174",
       "previous_status": "not_open",
-      "page_changed": false
+      "page_changed": true
     },
     "kuala_lumpur_open_men": {
       "id": "kuala_lumpur_open_men",
@@ -69,9 +73,9 @@
         "https://china.hyrox.com/event/hyrox-beijing-season-26-27-7e3efj?useEmbed=true",
         "https://china.hyrox.com/event/hyrox-beijing-season-26-27-7e3efj?useEmbed=true#main-container"
       ],
-      "content_hash": "3f50fccaf1b15a8122f1c61a1c3109bd67bdadb94609bd15dbf20b8eedcecaa4",
+      "content_hash": "101150bc4d44c186ee8b0e509d1e1dff24c1d2a2c9745f875258fb5d169a5068",
       "previous_status": "not_open",
-      "page_changed": false
+      "page_changed": true
     }
   }
 }
