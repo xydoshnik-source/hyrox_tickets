@@ -1,5 +1,5 @@
 {
-  "checked_at_utc": "2026-09-02T23:52:30.280985+00:00",
+  "checked_at_utc": "2026-09-03T04:40:29.953643+00:00",
   "watches": {
     "seoul": {
       "id": "seoul",
@@ -35,9 +35,9 @@
         "https://china.hyrox.com/event/hyrox-shanghai-season-26-27-itfsos?useEmbed=true",
         "https://china.hyrox.com/event/hyrox-shanghai-season-26-27-itfsos?useEmbed=true#main-container"
       ],
-      "content_hash": "06f2992367cf41605e430ed1b75e0a1baf7602e133e21f941ef0c512e8012174",
+      "content_hash": "fc9d64d58acb1cb1f64ae1fc76cc8b3230c8d56b16f7254f06b0d11405ba8f28",
       "previous_status": "not_open",
-      "page_changed": false
+      "page_changed": true
     },
     "kuala_lumpur_open_men": {
       "id": "kuala_lumpur_open_men",
