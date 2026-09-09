@@ -1,5 +1,5 @@
 {
-  "checked_at_utc": "2026-09-09T07:34:55.412211+00:00",
+  "checked_at_utc": "2026-09-09T09:39:18.229043+00:00",
   "watches": {
     "seoul": {
       "id": "seoul",
@@ -18,7 +18,7 @@
       ],
       "content_hash": "fe9482e24690dc4abcaa772ac41edd88b7a535460abd208020c72abc1de10ef1",
       "previous_status": "not_open",
-      "page_changed": true
+      "page_changed": false
     },
     "shanghai_open_men": {
       "id": "shanghai_open_men",
@@ -56,7 +56,7 @@
       ],
       "content_hash": "a6c081c50e0f2dee8ed193490170892df2cccdaba7387b5e148e53de45cbe19c",
       "previous_status": "not_open",
-      "page_changed": true
+      "page_changed": false
     },
     "beijing_open_men": {
       "id": "beijing_open_men",
