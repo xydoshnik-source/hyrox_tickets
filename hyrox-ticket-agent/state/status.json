@@ -1,5 +1,5 @@
 {
-  "checked_at_utc": "2026-09-09T04:51:46.795728+00:00",
+  "checked_at_utc": "2026-09-09T07:34:55.412211+00:00",
   "watches": {
     "seoul": {
       "id": "seoul",
@@ -16,9 +16,9 @@
         "https://korea.hyrox.com/event/hyrox-seoul-season-26-27-vthaza?useEmbed=true",
         "https://korea.hyrox.com/event/hyrox-seoul-season-26-27-vthaza?useEmbed=true#main-container"
       ],
-      "content_hash": "614505d70f04546d159df111dd3fbe073967e43ab88fc368bf7622bdb0adf82e",
+      "content_hash": "fe9482e24690dc4abcaa772ac41edd88b7a535460abd208020c72abc1de10ef1",
       "previous_status": "not_open",
-      "page_changed": false
+      "page_changed": true
     },
     "shanghai_open_men": {
       "id": "shanghai_open_men",
@@ -54,9 +54,9 @@
         "https://malaysia.hyrox.com/event/hyrox-airasia-kuala-lumpur-season-26-27-gjo5z9?useEmbed=true",
         "https://malaysia.hyrox.com/event/hyrox-airasia-kuala-lumpur-season-26-27-gjo5z9?useEmbed=true#main-container"
       ],
-      "content_hash": "a08b101bd0ac04996c3ed362c34d73ba4e7ff48df82ac6d3729da31422c00680",
+      "content_hash": "a6c081c50e0f2dee8ed193490170892df2cccdaba7387b5e148e53de45cbe19c",
       "previous_status": "not_open",
-      "page_changed": false
+      "page_changed": true
     },
     "beijing_open_men": {
       "id": "beijing_open_men",
