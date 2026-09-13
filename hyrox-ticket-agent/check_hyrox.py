@@ -1,76 +1,75 @@
 #!/usr/bin/env python3
 import datetime as dt
 import hashlib
-import html
+from html.parser import HTMLParser
 import json
 import os
 import pathlib
 import re
 import sys
 import urllib.error
-import urllib.parse
 import urllib.request
+from zoneinfo import ZoneInfo
 
 
 ROOT = pathlib.Path(__file__).resolve().parent
 STATE_DIR = ROOT / "state"
 STATE_PATH = STATE_DIR / "status.json"
+REPORT_TZ = ZoneInfo("Europe/Moscow")
 
 
 def env(name, default=""):
     return os.getenv(name, default).strip()
 
 
+def env_bool(name, default=False):
+    value = env(name)
+    if not value:
+        return default
+    return value.lower() in {"1", "true", "yes", "on"}
+
+
 TELEGRAM_BOT_TOKEN = env("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = env("TELEGRAM_CHAT_ID")
-FORCE_STATUS_REPORT = env("FORCE_STATUS_REPORT", "").lower() in {"1", "true", "yes"}
+SEND_DAILY_RECEIPT = env_bool("SEND_DAILY_RECEIPT")
+FORCE_DAILY_RECEIPT = env_bool("FORCE_DAILY_RECEIPT") or env_bool("FORCE_STATUS_REPORT")
 
-WATCHES = [
-    {
-        "id": "seoul",
-        "name": "Seoul Open Men",
-        "date_label": "13-15 Nov 2026",
-        "target_label": "Open Men / Singles",
-        "event_url": env("SEOUL_EVENT_URL", "https://hyrox.com/event/hyrox-seoul/"),
-        "ticket_url": env("SEOUL_OPEN_MEN_TICKET_URL", ""),
-        "target_category": env("SEOUL_OPEN_MEN_TARGET_CATEGORY", r"HYROX MEN OPEN|HYROX MEN|Open Men|Men Open"),
-        "ticket_url_pattern": r"korea\.hyrox\.com/event/",
-    },
-    {
-        "id": "shanghai_open_men",
-        "name": "Shanghai Open Men",
-        "date_label": "31 Oct - 1 Nov 2026",
-        "target_label": "Open Men / Singles",
-        "event_url": env("SHANGHAI_EVENT_URL", "https://hyrox.com/event/hyrox-shanghai-1031/"),
-        "ticket_url": env("SHANGHAI_OPEN_MEN_TICKET_URL", ""),
-        "target_category": env("SHANGHAI_OPEN_MEN_TARGET_CATEGORY", r"HYROX MEN OPEN|HYROX MEN|Open Men|Men Open"),
-        "ticket_url_pattern": r"china\.hyrox\.com/event/",
-    },
-    {
-        "id": "kuala_lumpur_open_men",
-        "name": "Kuala Lumpur Open Men",
-        "date_label": "10-13 Dec 2026",
-        "target_label": "Open Men / Singles",
-        "event_url": env("KUALA_LUMPUR_EVENT_URL", "https://hyrox.com/event/hyrox-kuala-lumpur/"),
-        "ticket_url": env("KUALA_LUMPUR_OPEN_MEN_TICKET_URL", ""),
-        "target_category": env("KUALA_LUMPUR_OPEN_MEN_TARGET_CATEGORY", r"HYROX MEN OPEN|HYROX MEN|Open Men|Men Open"),
-        "ticket_url_pattern": r"hyroxme\.com|malaysia\.hyrox\.com|b34crwi4\.myrdbx\.io|registration\.hyrox",
-    },
-    {
-        "id": "beijing_open_men",
-        "name": "Beijing Open Men",
-        "date_label": "11-13 Sep 2026",
-        "target_label": "Open Men / Singles",
-        "event_url": env("BEIJING_EVENT_URL", "https://hyrox.com/event/hyrox-beijing-0912/"),
-        "ticket_url": env("BEIJING_OPEN_MEN_TICKET_URL", ""),
-        "target_category": env("BEIJING_OPEN_MEN_TARGET_CATEGORY", r"HYROX MEN OPEN|HYROX MEN|Open Men|Men Open"),
-        "ticket_url_pattern": r"china\.hyrox\.com/event/",
-    },
-]
+WATCH = {
+    "id": "seoul_open_men",
+    "name": "HYROX Seoul",
+    "date_label": "13-15 November 2026",
+    "category_label": "Men's Open Singles / HYROX MEN",
+    "checkout_url": env(
+        "SEOUL_OPEN_MEN_CHECKOUT_URL",
+        "https://korea.hyrox.com/checkout/69fafdfb5e85aa5b5e0ae5a1",
+    ),
+    "expected_event_pattern": r"\bHYROX\s+Seoul\b",
+    "target_key": "SOLO_OPEN_M",
+}
 
 
-def fetch(url):
-    req = urllib.request.Request(
+class NextDataParser(HTMLParser):
+    def __init__(self):
+        super().__init__(convert_charrefs=False)
+        self.in_next_data = False
+        self.parts = []
+
+    def handle_starttag(self, tag, attrs):
+        attributes = dict(attrs)
+        if tag.lower() == "script" and attributes.get("id") == "__NEXT_DATA__":
+            self.in_next_data = True
+
+    def handle_endtag(self, tag):
+        if tag.lower() == "script" and self.in_next_data:
+            self.in_next_data = False
+
+    def handle_data(self, data):
+        if self.in_next_data:
+            self.parts.append(data)
+
+
+def fetch_page(url):
+    request = urllib.request.Request(
         url,
         headers={
             "User-Agent": (
@@ -79,253 +78,326 @@ def fetch(url):
                 "Chrome/125.0 Safari/537.36"
             ),
             "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "Cache-Control": "no-cache",
+            "Pragma": "no-cache",
         },
     )
-    with urllib.request.urlopen(req, timeout=45) as response:
+    with urllib.request.urlopen(request, timeout=45) as response:
         charset = response.headers.get_content_charset() or "utf-8"
-        return response.read().decode(charset, errors="replace")
+        return {
+            "body": response.read().decode(charset, errors="replace"),
+            "url": response.geturl(),
+            "http_status": response.status,
+        }
 
 
-def normalize(raw):
-    text = re.sub(r"<script\b[^>]*>.*?</script>", " ", raw, flags=re.I | re.S)
-    text = re.sub(r"<style\b[^>]*>.*?</style>", " ", text, flags=re.I | re.S)
-    text = re.sub(r"<[^>]+>", " ", text)
-    text = html.unescape(text)
-    text = re.sub(r"\s+", " ", text)
-    return text.strip()
+def parse_checkout_page(raw):
+    parser = NextDataParser()
+    parser.feed(raw)
+    if not parser.parts:
+        raise ValueError("checkout does not contain __NEXT_DATA__")
+
+    try:
+        data = json.loads("".join(parser.parts))
+        page_props = data["props"]["pageProps"]
+        event = page_props["event"]
+    except (KeyError, TypeError, json.JSONDecodeError) as exc:
+        raise ValueError("checkout data has an unexpected structure") from exc
+
+    if not isinstance(event, dict) or not isinstance(event.get("tickets"), list):
+        raise ValueError("checkout data does not contain a ticket list")
+    return event
 
 
-def find_links(raw, base_url):
-    links = []
-    for match in re.finditer(r'href=["\']([^"\']+)["\']', raw, flags=re.I):
-        href = html.unescape(match.group(1))
-        full = urllib.parse.urljoin(base_url, href)
-        if any(word in full.lower() for word in ["ticket", "register", "booking", "checkout", "event", "myrdbx"]):
-            links.append(full)
-    return sorted(set(links))
+def is_target_ticket(ticket):
+    name = str(ticket.get("name", "")).strip()
+    meta = ticket.get("meta") if isinstance(ticket.get("meta"), dict) else {}
+    key = meta.get("competition_class_matching_key")
+
+    # The name check protects us from known bad metadata on partner tickets.
+    exact_name = re.match(r"^HYROX MEN(?:\s|$)", name, flags=re.I) is not None
+    excluded = re.search(r"DOUBLES|MIXED|PRO|RELAY|ADAPTIVE|WOMEN", name, flags=re.I)
+    return exact_name and not excluded and key == WATCH["target_key"]
 
 
-def find_ticket_urls(links, ticket_url_pattern):
-    ticket_urls = []
-    for link in links:
-        if re.search(ticket_url_pattern, link, flags=re.I):
-            ticket_urls.append(link)
-    return sorted(set(ticket_urls))
+def availability_value(ticket):
+    value = ticket.get("v")
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        return None
+    return int(value)
 
 
-def has(pattern, text):
-    return re.search(pattern, text, flags=re.I) is not None
+def ticket_snapshot(ticket):
+    styles = ticket.get("styleOptions") if isinstance(ticket.get("styleOptions"), dict) else {}
+    return {
+        "id": ticket.get("id") or ticket.get("_id"),
+        "name": str(ticket.get("name", "")).strip(),
+        "active": ticket.get("active") is True,
+        "hidden": styles.get("hiddenInSelectionArea") is True,
+        "remaining": availability_value(ticket),
+    }
 
 
-def classify(text, links, target_category):
-    lowered = text.lower()
-    category_seen = has(target_category, text)
+def classify_checkout(event):
+    event_name = str(event.get("name", "")).strip()
+    if re.search(WATCH["expected_event_pattern"], event_name, flags=re.I) is None:
+        raise ValueError(f"unexpected event in checkout: {event_name or 'missing name'}")
 
-    not_open_markers = [
-        "ticket sales start soon",
-        "tickets sales start soon",
-        "coming soon",
-        "sales start soon",
-        "registration opens soon",
-        "tba",
-    ]
-    sold_out_markers = [
-        "sold out",
-        "sale has ended",
-        "currently unavailable",
-        "no tickets available",
-        "not available",
-        "waitlist",
-    ]
-    available_markers = [
-        "get your ticket",
-        "buy ticket",
-        "buy tickets",
-        "buy tickets here",
-        "register now",
-        "tickets available",
-        "add to cart",
-    ]
+    target_tickets = [ticket_snapshot(ticket) for ticket in event["tickets"] if is_target_ticket(ticket)]
+    if not target_tickets:
+        raise ValueError("exact Men's Open Singles category was not found")
 
-    not_open = any(marker in lowered for marker in not_open_markers)
-    sold_out = any(marker in lowered for marker in sold_out_markers)
-    available_words = any(marker in lowered for marker in available_markers)
-    ticketish_links = [link for link in links if any(w in link.lower() for w in ["ticket", "register", "booking", "checkout"])]
+    sale_status = event.get("saleStatus")
+    if sale_status not in {"onSale", "soldOut", "planned", "past"}:
+        raise ValueError(f"unknown checkout sale status: {sale_status!r}")
 
-    if category_seen and available_words and not sold_out:
-        return "available"
-    if ticketish_links and not not_open and not sold_out:
-        return "maybe_available"
-    if not_open:
-        return "not_open"
-    if sold_out:
-        return "sold_out"
-    return "unknown"
+    selectable = [ticket for ticket in target_tickets if ticket["active"] and not ticket["hidden"]]
+    available = [ticket for ticket in selectable if ticket["remaining"] is not None and ticket["remaining"] > 0]
+    if sale_status == "onSale" and available:
+        status = "available"
+    elif sale_status != "onSale" or not selectable:
+        status = "unavailable"
+    elif all(ticket["remaining"] is not None for ticket in selectable):
+        status = "unavailable"
+    else:
+        raise ValueError("checkout did not return inventory for every target ticket")
+
+    return {
+        "event_name": event_name,
+        "sale_status": sale_status,
+        "status": status,
+        "matched_tickets": target_tickets,
+    }
 
 
 def load_state():
-    if STATE_PATH.exists():
+    if not STATE_PATH.exists():
+        return {}
+    try:
         return json.loads(STATE_PATH.read_text(encoding="utf-8"))
-    return {}
+    except (OSError, json.JSONDecodeError) as exc:
+        raise RuntimeError(f"cannot read state: {exc}") from exc
 
 
 def save_state(state):
     STATE_DIR.mkdir(parents=True, exist_ok=True)
-    STATE_PATH.write_text(json.dumps(state, ensure_ascii=False, indent=2), encoding="utf-8")
+    STATE_PATH.write_text(json.dumps(state, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
-def send_telegram(text):
+def previous_watch(previous):
+    if isinstance(previous.get("watch"), dict):
+        return previous["watch"]
+    old_watch = previous.get("watches", {}).get("seoul", {})
+    return old_watch if isinstance(old_watch, dict) else {}
+
+
+def check_target(previous, fetcher=fetch_page):
+    fetched = fetcher(WATCH["checkout_url"])
+    if not isinstance(fetched, dict) or not isinstance(fetched.get("body"), str):
+        raise ValueError("fetcher returned an unexpected response")
+
+    parsed = classify_checkout(parse_checkout_page(fetched["body"]))
+    checked_url = fetched.get("url") or WATCH["checkout_url"]
+    proof = {
+        "event_name": parsed["event_name"],
+        "sale_status": parsed["sale_status"],
+        "tickets": parsed["matched_tickets"],
+    }
+    content_hash = hashlib.sha256(
+        json.dumps(proof, ensure_ascii=False, sort_keys=True).encode("utf-8")
+    ).hexdigest()
+
+    return {
+        "id": WATCH["id"],
+        "event": parsed["event_name"],
+        "date": WATCH["date_label"],
+        "category": WATCH["category_label"],
+        "checked_url": checked_url,
+        "http_status": fetched.get("http_status"),
+        "status": parsed["status"],
+        "sale_status": parsed["sale_status"],
+        "category_verified": True,
+        "matched_tickets": parsed["matched_tickets"],
+        "content_hash": content_hash,
+        "previous_status": previous.get("status"),
+        "check_ok": True,
+        "error": None,
+    }
+
+
+def failed_result(previous, exc):
+    return {
+        "id": WATCH["id"],
+        "event": WATCH["name"],
+        "date": WATCH["date_label"],
+        "category": WATCH["category_label"],
+        "checked_url": WATCH["checkout_url"],
+        "http_status": None,
+        "status": "check_failed",
+        "sale_status": None,
+        "category_verified": False,
+        "matched_tickets": [],
+        "content_hash": previous.get("content_hash"),
+        "previous_status": previous.get("status"),
+        "check_ok": False,
+        "error": f"{type(exc).__name__}: {exc}",
+    }
+
+
+def send_telegram(text, preview=False):
     if not TELEGRAM_BOT_TOKEN or not TELEGRAM_CHAT_ID:
-        print("Telegram secrets are missing; skip notification.")
-        return
+        raise RuntimeError("Telegram secrets are missing")
 
     url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
     payload = {
         "chat_id": TELEGRAM_CHAT_ID,
         "text": text,
-        "disable_web_page_preview": False,
+        "disable_web_page_preview": not preview,
     }
-    data = json.dumps(payload).encode("utf-8")
-    req = urllib.request.Request(
+    request = urllib.request.Request(
         url,
-        data=data,
+        data=json.dumps(payload).encode("utf-8"),
         headers={"Content-Type": "application/json"},
         method="POST",
     )
     try:
-        with urllib.request.urlopen(req, timeout=30) as response:
-            print(response.read().decode("utf-8")[:500])
+        with urllib.request.urlopen(request, timeout=30) as response:
+            body = json.loads(response.read().decode("utf-8"))
     except urllib.error.HTTPError as exc:
-        body = exc.read().decode("utf-8", errors="replace")
-        print(f"Telegram API error {exc.code}: {body}", file=sys.stderr)
-        raise
+        error_body = exc.read().decode("utf-8", errors="replace")
+        raise RuntimeError(f"Telegram API error {exc.code}: {error_body[:300]}") from exc
+    except json.JSONDecodeError as exc:
+        raise RuntimeError("Telegram API returned invalid JSON") from exc
+
+    if body.get("ok") is not True:
+        raise RuntimeError(f"Telegram rejected the message: {body}")
+    message_id = body.get("result", {}).get("message_id")
+    print(f"Telegram accepted message_id={message_id}")
 
 
-def check_watch(watch, previous_watch):
-    urls = [watch["event_url"]]
-    if watch.get("ticket_url"):
-        urls.append(watch["ticket_url"])
+def as_moscow(now_utc=None):
+    now_utc = now_utc or dt.datetime.now(dt.timezone.utc)
+    if now_utc.tzinfo is None:
+        now_utc = now_utc.replace(tzinfo=dt.timezone.utc)
+    return now_utc.astimezone(REPORT_TZ)
 
-    raw_parts = []
-    all_links = []
-    for url in urls:
-        raw = fetch(url)
-        raw_parts.append(raw)
-        all_links.extend(find_links(raw, url))
 
-    ticket_urls = find_ticket_urls(all_links, watch["ticket_url_pattern"])
-    for url in ticket_urls:
-        if url not in urls:
-            raw = fetch(url)
-            raw_parts.append(raw)
-            all_links.extend(find_links(raw, url))
-
-    raw_all = "\n".join(raw_parts)
-    text = normalize(raw_all)
-    links = sorted(set(all_links))
-    ticket_urls = sorted(set(ticket_urls + find_ticket_urls(links, watch["ticket_url_pattern"])))
-    status = classify(text, links, watch["target_category"])
-    category_seen = has(watch["target_category"], text)
-    content_hash = hashlib.sha256(text.encode("utf-8")).hexdigest()
-
+def result_phrase(status):
     return {
-        "id": watch["id"],
-        "name": watch["name"],
-        "date_label": watch["date_label"],
-        "target_label": watch["target_label"],
-        "event_url": watch["event_url"],
-        "ticket_url": watch.get("ticket_url", ""),
-        "target_category": watch["target_category"],
-        "status": status,
-        "category_seen": category_seen,
-        "ticket_urls_checked": ticket_urls,
-        "content_hash": content_hash,
-        "previous_status": previous_watch.get("status"),
-        "page_changed": previous_watch.get("content_hash") != content_hash,
-    }
+        "available": "билет есть",
+        "unavailable": "билетов нет",
+        "check_failed": "проверка не удалась",
+    }[status]
 
 
-def should_notify_watch(result):
-    previous_status = result.get("previous_status")
-    status = result["status"]
-    if status in {"available", "maybe_available"} and status != previous_status:
-        return True
-    if previous_status in {None, "not_open", "sold_out", "unknown"} and status == "available":
-        return True
-    return False
+def ticket_evidence(result):
+    evidence = []
+    for ticket in result.get("matched_tickets", []):
+        remaining = ticket.get("remaining")
+        if ticket.get("active") and not ticket.get("hidden") and isinstance(remaining, int):
+            detail = f"остаток {max(0, remaining)}"
+        elif not ticket.get("active") or ticket.get("hidden"):
+            detail = "недоступна для выбора"
+        else:
+            detail = "остаток не подтвержден"
+        evidence.append(f"{ticket.get('name')}: {detail}")
+    return evidence
 
 
-def status_text(status):
-    return {
-        "available": "✅ ДОСТУПНЫ",
-        "maybe_available": "⚠️ ВОЗМОЖНО ОТКРЫЛИСЬ",
-        "not_open": "❌ НЕ ОТКРЫТЫ",
-        "sold_out": "⛔ РАСПРОДАНО",
-        "unknown": "❔ НЕЯСНО",
-        None: "❔ ПЕРВЫЙ ЗАПУСК",
-    }.get(status, status)
-
-
-def summary_status(results):
-    if any(result["status"] == "available" for result in results):
-        return "✅ есть доступные билеты"
-    if any(result["status"] == "maybe_available" for result in results):
-        return "⚠️ есть возможный сигнал"
-    if all(result["status"] == "not_open" for result in results):
-        return "❌ продажи ещё не открыты"
-    if all(result["status"] == "sold_out" for result in results):
-        return "⛔ всё выглядит распроданным"
-    return "❔ статус нужно посмотреть"
-
-
-def build_message(results):
-    checked_at = dt.datetime.now(dt.timezone(dt.timedelta(hours=3))).strftime("%d.%m.%Y %H:%M MSK")
-    has_buy_signal = any(result["status"] in {"available", "maybe_available"} for result in results)
+def build_daily_receipt(result, now_utc=None):
+    checked_at = as_moscow(now_utc).strftime("%d.%m.%Y %H:%M MSK")
     lines = [
-        f"HYROX ticket watcher — {summary_status(results)}",
-        f"Проверено: {checked_at}",
+        "Ежедневная проверка HYROX",
+        f"Время проверки по Москве: {checked_at}",
+        f"Событие: {result['event']} ({result['date']})",
+        f"Категория: {result['category']}",
+        f"Фактически проверенный URL: {result['checked_url']}",
+        f"Результат: {result_phrase(result['status'])}",
     ]
-
-    if has_buy_signal:
-        lines.insert(0, "⚡ Есть сигнал по билетам HYROX.")
-
-    for result in results:
-        ticket_url = result["ticket_url"] or (result["ticket_urls_checked"][0] if result["ticket_urls_checked"] else result["event_url"])
-        lines.extend(
-            [
-                "",
-                f"{status_text(result['status'])} — {result['name']}",
-                f"Дата: {result['date_label']}",
-                f"Категория: {result['target_label']}",
-                f"Категория на странице: {'да' if result['category_seen'] else 'нет'}",
-                f"Ссылка: {ticket_url}",
-            ]
-        )
-
+    if result["status"] == "check_failed":
+        lines.append(f"Ошибка: {result.get('error') or 'неизвестная ошибка'}")
+    else:
+        lines.extend(f"Позиция: {line}" for line in ticket_evidence(result))
     return "\n".join(lines)
 
 
-def main():
-    previous = load_state()
-    previous_watches = previous.get("watches", {})
+def build_availability_alert(result, now_utc=None):
+    checked_at = as_moscow(now_utc).strftime("%d.%m.%Y %H:%M MSK")
+    available_names = [
+        ticket["name"]
+        for ticket in result.get("matched_tickets", [])
+        if ticket.get("active")
+        and not ticket.get("hidden")
+        and isinstance(ticket.get("remaining"), int)
+        and ticket["remaining"] > 0
+    ]
+    lines = [
+        "HYROX SEOUL: БИЛЕТ ЕСТЬ",
+        f"Категория: {result['category']}",
+        f"Доступно: {', '.join(available_names)}",
+        f"Купить: {result['checked_url']}",
+        f"Проверено: {checked_at}",
+    ]
+    return "\n".join(lines)
 
-    results = []
-    for watch in WATCHES:
-        result = check_watch(watch, previous_watches.get(watch["id"], {}))
-        results.append(result)
 
-    now = dt.datetime.now(dt.timezone.utc).isoformat()
+def should_send_alert(result):
+    return result["status"] == "available" and result.get("previous_status") != "available"
+
+
+def run(
+    now_utc=None,
+    fetcher=fetch_page,
+    sender=send_telegram,
+    state_loader=load_state,
+    state_saver=save_state,
+    send_daily=SEND_DAILY_RECEIPT,
+    force_receipt=FORCE_DAILY_RECEIPT,
+):
+    now_utc = now_utc or dt.datetime.now(dt.timezone.utc)
+    state_error = None
+    try:
+        previous = state_loader()
+    except Exception as exc:
+        previous = {}
+        state_error = exc
+    old_watch = previous_watch(previous)
+
+    if state_error is not None:
+        result = failed_result(old_watch, RuntimeError(f"state load failed: {state_error}"))
+    else:
+        try:
+            result = check_target(old_watch, fetcher=fetcher)
+        except Exception as exc:
+            result = failed_result(old_watch, exc)
+
+    today_msk = as_moscow(now_utc).date().isoformat()
+    last_receipt = previous.get("last_daily_receipt_date_msk")
+    if last_receipt is None:
+        last_receipt = previous.get("last_daily_report_date_msk")
+    scheduled_receipt_due = send_daily and last_receipt != today_msk
+
+    if should_send_alert(result):
+        sender(build_availability_alert(result, now_utc), preview=True)
+
+    if scheduled_receipt_due or force_receipt:
+        sender(build_daily_receipt(result, now_utc), preview=False)
+        if scheduled_receipt_due:
+            last_receipt = today_msk
+
     state = {
-        "checked_at_utc": now,
-        "watches": {result["id"]: result for result in results},
+        "schema_version": 2,
+        "checked_at_utc": now_utc.astimezone(dt.timezone.utc).isoformat(),
+        "last_daily_receipt_date_msk": last_receipt,
+        "watch": result,
     }
-
+    state_saver(state)
     print(json.dumps(state, ensure_ascii=False, indent=2))
+    return state
 
-    save_state(state)
 
-    if FORCE_STATUS_REPORT or any(should_notify_watch(result) for result in results):
-        send_telegram(build_message(results))
+def main():
+    run()
 
 
 if __name__ == "__main__":

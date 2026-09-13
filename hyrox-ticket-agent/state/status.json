@@ -1,81 +1,36 @@
 {
-  "checked_at_utc": "2026-09-13T04:56:58.964875+00:00",
-  "watches": {
-    "seoul": {
-      "id": "seoul",
-      "name": "Seoul Open Men",
-      "date_label": "13-15 Nov 2026",
-      "target_label": "Open Men / Singles",
-      "event_url": "https://hyrox.com/event/hyrox-seoul/",
-      "ticket_url": "",
-      "target_category": "HYROX MEN OPEN|HYROX MEN|Open Men|Men Open",
-      "status": "not_open",
-      "category_seen": true,
-      "ticket_urls_checked": [
-        "https://korea.hyrox.com/event/hyrox-seoul-season-26-27-vthaza",
-        "https://korea.hyrox.com/event/hyrox-seoul-season-26-27-vthaza?useEmbed=true",
-        "https://korea.hyrox.com/event/hyrox-seoul-season-26-27-vthaza?useEmbed=true#main-container"
-      ],
-      "content_hash": "fe9482e24690dc4abcaa772ac41edd88b7a535460abd208020c72abc1de10ef1",
-      "previous_status": "not_open",
-      "page_changed": false
-    },
-    "shanghai_open_men": {
-      "id": "shanghai_open_men",
-      "name": "Shanghai Open Men",
-      "date_label": "31 Oct - 1 Nov 2026",
-      "target_label": "Open Men / Singles",
-      "event_url": "https://hyrox.com/event/hyrox-shanghai-1031/",
-      "ticket_url": "",
-      "target_category": "HYROX MEN OPEN|HYROX MEN|Open Men|Men Open",
-      "status": "not_open",
-      "category_seen": true,
-      "ticket_urls_checked": [
-        "https://china.hyrox.com/event/hyrox-shanghai-season-26-27-itfsos",
-        "https://china.hyrox.com/event/hyrox-shanghai-season-26-27-itfsos?useEmbed=true",
-        "https://china.hyrox.com/event/hyrox-shanghai-season-26-27-itfsos?useEmbed=true#main-container"
-      ],
-      "content_hash": "fc9d64d58acb1cb1f64ae1fc76cc8b3230c8d56b16f7254f06b0d11405ba8f28",
-      "previous_status": "not_open",
-      "page_changed": false
-    },
-    "kuala_lumpur_open_men": {
-      "id": "kuala_lumpur_open_men",
-      "name": "Kuala Lumpur Open Men",
-      "date_label": "10-13 Dec 2026",
-      "target_label": "Open Men / Singles",
-      "event_url": "https://hyrox.com/event/hyrox-kuala-lumpur/",
-      "ticket_url": "",
-      "target_category": "HYROX MEN OPEN|HYROX MEN|Open Men|Men Open",
-      "status": "not_open",
-      "category_seen": true,
-      "ticket_urls_checked": [
-        "https://malaysia.hyrox.com/event/hyrox-airasia-kuala-lumpur-season-26-27-gjo5z9",
-        "https://malaysia.hyrox.com/event/hyrox-airasia-kuala-lumpur-season-26-27-gjo5z9?useEmbed=true",
-        "https://malaysia.hyrox.com/event/hyrox-airasia-kuala-lumpur-season-26-27-gjo5z9?useEmbed=true#main-container"
-      ],
-      "content_hash": "a6c081c50e0f2dee8ed193490170892df2cccdaba7387b5e148e53de45cbe19c",
-      "previous_status": "not_open",
-      "page_changed": false
-    },
-    "beijing_open_men": {
-      "id": "beijing_open_men",
-      "name": "Beijing Open Men",
-      "date_label": "11-13 Sep 2026",
-      "target_label": "Open Men / Singles",
-      "event_url": "https://hyrox.com/event/hyrox-beijing-0912/",
-      "ticket_url": "",
-      "target_category": "HYROX MEN OPEN|HYROX MEN|Open Men|Men Open",
-      "status": "not_open",
-      "category_seen": true,
-      "ticket_urls_checked": [
-        "https://china.hyrox.com/event/hyrox-beijing-season-26-27-7e3efj",
-        "https://china.hyrox.com/event/hyrox-beijing-season-26-27-7e3efj?useEmbed=true",
-        "https://china.hyrox.com/event/hyrox-beijing-season-26-27-7e3efj?useEmbed=true#main-container"
-      ],
-      "content_hash": "7c769223108920a7f6b1b5c0985782aea93f7fd5f1bb4f754789081b94f079bb",
-      "previous_status": "not_open",
-      "page_changed": false
-    }
+  "schema_version": 2,
+  "checked_at_utc": "2026-09-13T06:37:25.819119+00:00",
+  "last_daily_receipt_date_msk": null,
+  "watch": {
+    "id": "seoul_open_men",
+    "event": "AirAsia | HYROX Seoul | Season 26/27",
+    "date": "13-15 November 2026",
+    "category": "Men's Open Singles / HYROX MEN",
+    "checked_url": "https://korea.hyrox.com/checkout/69fafdfb5e85aa5b5e0ae5a1",
+    "http_status": 200,
+    "status": "unavailable",
+    "sale_status": "onSale",
+    "category_verified": true,
+    "matched_tickets": [
+      {
+        "id": "69fafdfb399575a4b3569299",
+        "name": "HYROX MEN 남자 오픈 | Saturday",
+        "active": true,
+        "hidden": false,
+        "remaining": -21
+      },
+      {
+        "id": "6a4e54774806215df3f7d186",
+        "name": "HYROX MEN 남자 오픈 | Friday",
+        "active": true,
+        "hidden": false,
+        "remaining": -4
+      }
+    ],
+    "content_hash": "19ab01d5e07902466f0e6312413daf9710421993097d5970115946bfdb2b0ebb",
+    "previous_status": "not_open",
+    "check_ok": true,
+    "error": null
   }
 }
