@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
-  "checked_at_utc": "2026-09-13T10:10:54.466372+00:00",
-  "last_daily_receipt_date_msk": null,
+  "checked_at_utc": "2026-09-13T12:50:06.869651+00:00",
+  "last_daily_receipt_date_msk": "2026-09-13",
   "watch": {
     "id": "seoul_open_men",
     "event": "AirAsia | HYROX Seoul | Season 26/27",
