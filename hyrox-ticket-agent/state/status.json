@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
-  "checked_at_utc": "2026-09-17T09:57:06.919975+00:00",
-  "last_daily_receipt_date_msk": "2026-09-16",
+  "checked_at_utc": "2026-09-17T12:45:51.641727+00:00",
+  "last_daily_receipt_date_msk": "2026-09-17",
   "watch": {
     "id": "seoul_open_men",
     "event": "AirAsia | HYROX Seoul | Season 26/27",
@@ -18,7 +18,7 @@
         "name": "HYROX MEN 남자 오픈 | Saturday",
         "active": true,
         "hidden": false,
-        "remaining": -24
+        "remaining": -25
       },
       {
         "id": "6a4e54774806215df3f7d186",
@@ -28,7 +28,7 @@
         "remaining": -3
       }
     ],
-    "content_hash": "3fc7af3324fbe561e45f4942ad5a594de5254278b96d68767a668f7f44bfe618",
+    "content_hash": "3b1e85ef6efd97420075dd15396822d505d66080924b188137eb27a1b7a641fc",
     "previous_status": "unavailable",
     "check_ok": true,
     "error": null
