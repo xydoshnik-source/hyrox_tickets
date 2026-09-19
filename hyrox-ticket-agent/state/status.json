@@ -1,36 +1,64 @@
 {
-  "schema_version": 2,
-  "checked_at_utc": "2026-09-19T12:02:49.707184+00:00",
+  "schema_version": 3,
+  "checked_at_utc": "2026-09-19T12:12:35.481208+00:00",
   "last_daily_receipt_date_msk": "2026-09-19",
-  "watch": {
-    "id": "seoul_open_men",
-    "event": "AirAsia | HYROX Seoul | Season 26/27",
-    "date": "13-15 November 2026",
-    "category": "Men's Open Singles / HYROX MEN",
-    "checked_url": "https://korea.hyrox.com/checkout/69fafdfb5e85aa5b5e0ae5a1",
-    "http_status": 200,
-    "status": "unavailable",
-    "sale_status": "onSale",
-    "category_verified": true,
-    "matched_tickets": [
-      {
-        "id": "69fafdfb399575a4b3569299",
-        "name": "HYROX MEN 남자 오픈 | Saturday",
-        "active": true,
-        "hidden": false,
-        "remaining": -24
-      },
-      {
-        "id": "6a4e54774806215df3f7d186",
-        "name": "HYROX MEN 남자 오픈 | Friday",
-        "active": true,
-        "hidden": false,
-        "remaining": -3
-      }
-    ],
-    "content_hash": "3fc7af3324fbe561e45f4942ad5a594de5254278b96d68767a668f7f44bfe618",
-    "previous_status": "unavailable",
-    "check_ok": true,
-    "error": null
+  "watches": {
+    "seoul_open_men": {
+      "id": "seoul_open_men",
+      "event": "AirAsia | HYROX Seoul | Season 26/27",
+      "date": "13-15 November 2026",
+      "category": "Men's Open Singles / HYROX MEN",
+      "checked_url": "https://korea.hyrox.com/checkout/69fafdfb5e85aa5b5e0ae5a1",
+      "http_status": 200,
+      "status": "unavailable",
+      "sale_status": "onSale",
+      "category_verified": true,
+      "matched_tickets": [
+        {
+          "id": "69fafdfb399575a4b3569299",
+          "name": "HYROX MEN 남자 오픈 | Saturday",
+          "active": true,
+          "hidden": false,
+          "remaining": -24
+        },
+        {
+          "id": "6a4e54774806215df3f7d186",
+          "name": "HYROX MEN 남자 오픈 | Friday",
+          "active": true,
+          "hidden": false,
+          "remaining": -3
+        }
+      ],
+      "content_hash": "3fc7af3324fbe561e45f4942ad5a594de5254278b96d68767a668f7f44bfe618",
+      "previous_status": "unavailable",
+      "check_ok": true,
+      "error": null,
+      "alert_title": "HYROX SEOUL"
+    },
+    "shanghai_open_men": {
+      "id": "shanghai_open_men",
+      "event": "ZhongAn HYROX Shanghai | Season 26/27",
+      "date": "31 October - 1 November 2026",
+      "category": "Men's Open Singles / HYROX MEN",
+      "checked_url": "https://china.hyrox.com/checkout/6a6894ffeb4d87c71f1d77a6",
+      "http_status": 200,
+      "status": "unavailable",
+      "sale_status": "onSale",
+      "category_verified": true,
+      "matched_tickets": [
+        {
+          "id": "6a6894ffb43c611f1b045f38",
+          "name": "HYROX MEN | Saturday",
+          "active": true,
+          "hidden": false,
+          "remaining": 0
+        }
+      ],
+      "content_hash": "d8d7ed6379c3861cfe8c19958c6eb4286c534719904c3d9e6ad8a9e7e749334b",
+      "previous_status": null,
+      "check_ok": true,
+      "error": null,
+      "alert_title": "HYROX SHANGHAI"
+    }
   }
 }
