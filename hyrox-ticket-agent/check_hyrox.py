@@ -34,18 +34,34 @@ TELEGRAM_CHAT_ID = env("TELEGRAM_CHAT_ID")
 SEND_DAILY_RECEIPT = env_bool("SEND_DAILY_RECEIPT")
 FORCE_DAILY_RECEIPT = env_bool("FORCE_DAILY_RECEIPT") or env_bool("FORCE_STATUS_REPORT")
 
-WATCH = {
-    "id": "seoul_open_men",
-    "name": "HYROX Seoul",
-    "date_label": "13-15 November 2026",
-    "category_label": "Men's Open Singles / HYROX MEN",
-    "checkout_url": env(
-        "SEOUL_OPEN_MEN_CHECKOUT_URL",
-        "https://korea.hyrox.com/checkout/69fafdfb5e85aa5b5e0ae5a1",
-    ),
-    "expected_event_pattern": r"\bHYROX\s+Seoul\b",
-    "target_key": "SOLO_OPEN_M",
-}
+WATCHES = [
+    {
+        "id": "seoul_open_men",
+        "name": "HYROX Seoul",
+        "date_label": "13-15 November 2026",
+        "category_label": "Men's Open Singles / HYROX MEN",
+        "checkout_url": env(
+            "SEOUL_OPEN_MEN_CHECKOUT_URL",
+            "https://korea.hyrox.com/checkout/69fafdfb5e85aa5b5e0ae5a1",
+        ),
+        "expected_event_pattern": r"\bHYROX\s+Seoul\b",
+        "target_key": "SOLO_OPEN_M",
+        "alert_title": "HYROX SEOUL",
+    },
+    {
+        "id": "shanghai_open_men",
+        "name": "HYROX Shanghai",
+        "date_label": "31 October - 1 November 2026",
+        "category_label": "Men's Open Singles / HYROX MEN",
+        "checkout_url": env(
+            "SHANGHAI_OPEN_MEN_CHECKOUT_URL",
+            "https://china.hyrox.com/checkout/6a6894ffeb4d87c71f1d77a6",
+        ),
+        "expected_event_pattern": r"\bHYROX\s+Shanghai\b",
+        "target_key": "SOLO_OPEN_M",
+        "alert_title": "HYROX SHANGHAI",
+    },
+]
 
 
 class NextDataParser(HTMLParser):
@@ -109,7 +125,7 @@ def parse_checkout_page(raw):
     return event
 
 
-def is_target_ticket(ticket):
+def is_target_ticket(ticket, watch):
     name = str(ticket.get("name", "")).strip()
     meta = ticket.get("meta") if isinstance(ticket.get("meta"), dict) else {}
     key = meta.get("competition_class_matching_key")
@@ -117,7 +133,7 @@ def is_target_ticket(ticket):
     # The name check protects us from known bad metadata on partner tickets.
     exact_name = re.match(r"^HYROX MEN(?:\s|$)", name, flags=re.I) is not None
     excluded = re.search(r"DOUBLES|MIXED|PRO|RELAY|ADAPTIVE|WOMEN", name, flags=re.I)
-    return exact_name and not excluded and key == WATCH["target_key"]
+    return exact_name and not excluded and key == watch["target_key"]
 
 
 def availability_value(ticket):
@@ -138,12 +154,14 @@ def ticket_snapshot(ticket):
     }
 
 
-def classify_checkout(event):
+def classify_checkout(event, watch):
     event_name = str(event.get("name", "")).strip()
-    if re.search(WATCH["expected_event_pattern"], event_name, flags=re.I) is None:
+    if re.search(watch["expected_event_pattern"], event_name, flags=re.I) is None:
         raise ValueError(f"unexpected event in checkout: {event_name or 'missing name'}")
 
-    target_tickets = [ticket_snapshot(ticket) for ticket in event["tickets"] if is_target_ticket(ticket)]
+    target_tickets = [
+        ticket_snapshot(ticket) for ticket in event["tickets"] if is_target_ticket(ticket, watch)
+    ]
     if not target_tickets:
         raise ValueError("exact Men's Open Singles category was not found")
 
@@ -184,20 +202,23 @@ def save_state(state):
     STATE_PATH.write_text(json.dumps(state, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
-def previous_watch(previous):
-    if isinstance(previous.get("watch"), dict):
-        return previous["watch"]
-    old_watch = previous.get("watches", {}).get("seoul", {})
-    return old_watch if isinstance(old_watch, dict) else {}
+def previous_watches(previous):
+    watches = previous.get("watches")
+    if isinstance(watches, dict):
+        return watches
+    old_watch = previous.get("watch")
+    if isinstance(old_watch, dict):
+        return {"seoul_open_men": old_watch}
+    return {}
 
 
-def check_target(previous, fetcher=fetch_page):
-    fetched = fetcher(WATCH["checkout_url"])
+def check_target(watch, previous, fetcher=fetch_page):
+    fetched = fetcher(watch["checkout_url"])
     if not isinstance(fetched, dict) or not isinstance(fetched.get("body"), str):
         raise ValueError("fetcher returned an unexpected response")
 
-    parsed = classify_checkout(parse_checkout_page(fetched["body"]))
-    checked_url = fetched.get("url") or WATCH["checkout_url"]
+    parsed = classify_checkout(parse_checkout_page(fetched["body"]), watch)
+    checked_url = fetched.get("url") or watch["checkout_url"]
     proof = {
         "event_name": parsed["event_name"],
         "sale_status": parsed["sale_status"],
@@ -208,10 +229,10 @@ def check_target(previous, fetcher=fetch_page):
     ).hexdigest()
 
     return {
-        "id": WATCH["id"],
+        "id": watch["id"],
         "event": parsed["event_name"],
-        "date": WATCH["date_label"],
-        "category": WATCH["category_label"],
+        "date": watch["date_label"],
+        "category": watch["category_label"],
         "checked_url": checked_url,
         "http_status": fetched.get("http_status"),
         "status": parsed["status"],
@@ -225,13 +246,13 @@ def check_target(previous, fetcher=fetch_page):
     }
 
 
-def failed_result(previous, exc):
+def failed_result(watch, previous, exc):
     return {
-        "id": WATCH["id"],
-        "event": WATCH["name"],
-        "date": WATCH["date_label"],
-        "category": WATCH["category_label"],
-        "checked_url": WATCH["checkout_url"],
+        "id": watch["id"],
+        "event": watch["name"],
+        "date": watch["date_label"],
+        "category": watch["category_label"],
+        "checked_url": watch["checkout_url"],
         "http_status": None,
         "status": "check_failed",
         "sale_status": None,
@@ -304,20 +325,26 @@ def ticket_evidence(result):
     return evidence
 
 
-def build_daily_receipt(result, now_utc=None):
+def build_daily_receipt(results, now_utc=None):
     checked_at = as_moscow(now_utc).strftime("%d.%m.%Y %H:%M MSK")
     lines = [
         "Ежедневная проверка HYROX",
         f"Время проверки по Москве: {checked_at}",
-        f"Событие: {result['event']} ({result['date']})",
-        f"Категория: {result['category']}",
-        f"Фактически проверенный URL: {result['checked_url']}",
-        f"Результат: {result_phrase(result['status'])}",
     ]
-    if result["status"] == "check_failed":
-        lines.append(f"Ошибка: {result.get('error') or 'неизвестная ошибка'}")
-    else:
-        lines.extend(f"Позиция: {line}" for line in ticket_evidence(result))
+    for result in results:
+        lines.extend(
+            [
+                "",
+                f"Событие: {result['event']} ({result['date']})",
+                f"Категория: {result['category']}",
+                f"Результат: {result_phrase(result['status'])}",
+                f"Проверенный URL: {result['checked_url']}",
+            ]
+        )
+        if result["status"] == "check_failed":
+            lines.append(f"Ошибка: {result.get('error') or 'неизвестная ошибка'}")
+        else:
+            lines.extend(f"Позиция: {line}" for line in ticket_evidence(result))
     return "\n".join(lines)
 
 
@@ -332,7 +359,7 @@ def build_availability_alert(result, now_utc=None):
         and ticket["remaining"] > 0
     ]
     lines = [
-        "HYROX SEOUL: БИЛЕТ ЕСТЬ",
+        f"{result['alert_title']}: БИЛЕТ ЕСТЬ",
         f"Категория: {result['category']}",
         f"Доступно: {', '.join(available_names)}",
         f"Купить: {result['checked_url']}",
@@ -361,15 +388,23 @@ def run(
     except Exception as exc:
         previous = {}
         state_error = exc
-    old_watch = previous_watch(previous)
-
-    if state_error is not None:
-        result = failed_result(old_watch, RuntimeError(f"state load failed: {state_error}"))
-    else:
-        try:
-            result = check_target(old_watch, fetcher=fetcher)
-        except Exception as exc:
-            result = failed_result(old_watch, exc)
+    old_watches = previous_watches(previous)
+    results = []
+    for watch in WATCHES:
+        old_watch = old_watches.get(watch["id"], {})
+        if state_error is not None:
+            result = failed_result(
+                watch,
+                old_watch,
+                RuntimeError(f"state load failed: {state_error}"),
+            )
+        else:
+            try:
+                result = check_target(watch, old_watch, fetcher=fetcher)
+            except Exception as exc:
+                result = failed_result(watch, old_watch, exc)
+        result["alert_title"] = watch["alert_title"]
+        results.append(result)
 
     today_msk = as_moscow(now_utc).date().isoformat()
     last_receipt = previous.get("last_daily_receipt_date_msk")
@@ -377,19 +412,20 @@ def run(
         last_receipt = previous.get("last_daily_report_date_msk")
     scheduled_receipt_due = send_daily and last_receipt != today_msk
 
-    if should_send_alert(result):
-        sender(build_availability_alert(result, now_utc), preview=True)
+    for result in results:
+        if should_send_alert(result):
+            sender(build_availability_alert(result, now_utc), preview=True)
 
     if scheduled_receipt_due or force_receipt:
-        sender(build_daily_receipt(result, now_utc), preview=False)
+        sender(build_daily_receipt(results, now_utc), preview=False)
         if scheduled_receipt_due:
             last_receipt = today_msk
 
     state = {
-        "schema_version": 2,
+        "schema_version": 3,
         "checked_at_utc": now_utc.astimezone(dt.timezone.utc).isoformat(),
         "last_daily_receipt_date_msk": last_receipt,
-        "watch": result,
+        "watches": {result["id"]: result for result in results},
     }
     state_saver(state)
     print(json.dumps(state, ensure_ascii=False, indent=2))
