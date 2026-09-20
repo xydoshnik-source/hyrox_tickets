@@ -46,7 +46,20 @@ WATCHES = [
         ),
         "expected_event_pattern": r"\bHYROX\s+Seoul\b",
         "target_key": "SOLO_OPEN_M",
-        "telegram_label": "Seoul Men’s Open",
+        "telegram_label": "Seoul",
+    },
+    {
+        "id": "shanghai_open_men",
+        "name": "HYROX Shanghai",
+        "date_label": "31 October - 1 November 2026",
+        "category_label": "Men's Open Singles / HYROX MEN",
+        "checkout_url": env(
+            "SHANGHAI_OPEN_MEN_CHECKOUT_URL",
+            "https://china.hyrox.com/checkout/6a6894ffeb4d87c71f1d77a6",
+        ),
+        "expected_event_pattern": r"\bHYROX\s+Shanghai\b",
+        "target_key": "SOLO_OPEN_M",
+        "telegram_label": "Shanghai",
     },
 ]
 
@@ -290,18 +303,24 @@ def as_moscow(now_utc=None):
     return now_utc.astimezone(REPORT_TZ)
 
 
+def build_status_message(results):
+    labels = {watch["id"]: watch["telegram_label"] for watch in WATCHES}
+    phrases = {
+        "available": "БИЛЕТ ЕСТЬ",
+        "unavailable": "нет",
+        "check_failed": "ошибка проверки",
+    }
+    return " ".join(
+        f"{labels[result['id']]} — {phrases[result['status']]}." for result in results
+    )
+
+
 def build_daily_receipt(results, now_utc=None):
-    result = results[0]
-    phrase = {
-        "available": "билет есть",
-        "unavailable": "билетов нет",
-        "check_failed": "проверка не удалась",
-    }[result["status"]]
-    return f"{WATCHES[0]['telegram_label']} — {phrase}."
+    return build_status_message(results)
 
 
-def build_availability_alert(result, now_utc=None):
-    return f"{WATCHES[0]['telegram_label']} — БИЛЕТ ЕСТЬ."
+def build_availability_alert(results, now_utc=None):
+    return build_status_message(results)
 
 
 def should_send_alert(result):
@@ -347,9 +366,8 @@ def run(
         last_receipt = previous.get("last_daily_report_date_msk")
     scheduled_receipt_due = send_daily and last_receipt != today_msk
 
-    for result in results:
-        if should_send_alert(result):
-            sender(build_availability_alert(result, now_utc), preview=True)
+    if any(should_send_alert(result) for result in results):
+        sender(build_availability_alert(results, now_utc), preview=False)
 
     if scheduled_receipt_due or force_receipt:
         sender(build_daily_receipt(results, now_utc), preview=False)
