@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "checked_at_utc": "2026-09-20T03:24:47.659739+00:00",
+  "checked_at_utc": "2026-09-20T03:33:47.728034+00:00",
   "last_daily_receipt_date_msk": "2026-09-19",
   "watches": {
     "seoul_open_men": {
@@ -31,6 +31,30 @@
       ],
       "content_hash": "340c8f10985a9ead8802b30e3040be3ef00103c15d187fc86038914b8428b631",
       "previous_status": "unavailable",
+      "check_ok": true,
+      "error": null
+    },
+    "shanghai_open_men": {
+      "id": "shanghai_open_men",
+      "event": "ZhongAn HYROX Shanghai | Season 26/27",
+      "date": "31 October - 1 November 2026",
+      "category": "Men's Open Singles / HYROX MEN",
+      "checked_url": "https://china.hyrox.com/checkout/6a6894ffeb4d87c71f1d77a6",
+      "http_status": 200,
+      "status": "unavailable",
+      "sale_status": "onSale",
+      "category_verified": true,
+      "matched_tickets": [
+        {
+          "id": "6a6894ffb43c611f1b045f38",
+          "name": "HYROX MEN | Saturday",
+          "active": true,
+          "hidden": false,
+          "remaining": 0
+        }
+      ],
+      "content_hash": "d8d7ed6379c3861cfe8c19958c6eb4286c534719904c3d9e6ad8a9e7e749334b",
+      "previous_status": null,
       "check_ok": true,
       "error": null
     }
