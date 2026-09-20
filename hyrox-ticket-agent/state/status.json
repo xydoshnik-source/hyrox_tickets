@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "checked_at_utc": "2026-09-19T12:12:35.481208+00:00",
+  "checked_at_utc": "2026-09-19T23:54:51.248402+00:00",
   "last_daily_receipt_date_msk": "2026-09-19",
   "watches": {
     "seoul_open_men": {
@@ -55,7 +55,7 @@
         }
       ],
       "content_hash": "d8d7ed6379c3861cfe8c19958c6eb4286c534719904c3d9e6ad8a9e7e749334b",
-      "previous_status": null,
+      "previous_status": "unavailable",
       "check_ok": true,
       "error": null,
       "alert_title": "HYROX SHANGHAI"
