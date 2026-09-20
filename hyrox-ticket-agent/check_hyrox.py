@@ -46,20 +46,7 @@ WATCHES = [
         ),
         "expected_event_pattern": r"\bHYROX\s+Seoul\b",
         "target_key": "SOLO_OPEN_M",
-        "alert_title": "HYROX SEOUL",
-    },
-    {
-        "id": "shanghai_open_men",
-        "name": "HYROX Shanghai",
-        "date_label": "31 October - 1 November 2026",
-        "category_label": "Men's Open Singles / HYROX MEN",
-        "checkout_url": env(
-            "SHANGHAI_OPEN_MEN_CHECKOUT_URL",
-            "https://china.hyrox.com/checkout/6a6894ffeb4d87c71f1d77a6",
-        ),
-        "expected_event_pattern": r"\bHYROX\s+Shanghai\b",
-        "target_key": "SOLO_OPEN_M",
-        "alert_title": "HYROX SHANGHAI",
+        "telegram_label": "Seoul Men’s Open",
     },
 ]
 
@@ -303,69 +290,18 @@ def as_moscow(now_utc=None):
     return now_utc.astimezone(REPORT_TZ)
 
 
-def result_phrase(status):
-    return {
+def build_daily_receipt(results, now_utc=None):
+    result = results[0]
+    phrase = {
         "available": "билет есть",
         "unavailable": "билетов нет",
         "check_failed": "проверка не удалась",
-    }[status]
-
-
-def ticket_evidence(result):
-    evidence = []
-    for ticket in result.get("matched_tickets", []):
-        remaining = ticket.get("remaining")
-        if ticket.get("active") and not ticket.get("hidden") and isinstance(remaining, int):
-            detail = f"остаток {max(0, remaining)}"
-        elif not ticket.get("active") or ticket.get("hidden"):
-            detail = "недоступна для выбора"
-        else:
-            detail = "остаток не подтвержден"
-        evidence.append(f"{ticket.get('name')}: {detail}")
-    return evidence
-
-
-def build_daily_receipt(results, now_utc=None):
-    checked_at = as_moscow(now_utc).strftime("%d.%m.%Y %H:%M MSK")
-    lines = [
-        "Ежедневная проверка HYROX",
-        f"Время проверки по Москве: {checked_at}",
-    ]
-    for result in results:
-        lines.extend(
-            [
-                "",
-                f"Событие: {result['event']} ({result['date']})",
-                f"Категория: {result['category']}",
-                f"Результат: {result_phrase(result['status'])}",
-                f"Проверенный URL: {result['checked_url']}",
-            ]
-        )
-        if result["status"] == "check_failed":
-            lines.append(f"Ошибка: {result.get('error') or 'неизвестная ошибка'}")
-        else:
-            lines.extend(f"Позиция: {line}" for line in ticket_evidence(result))
-    return "\n".join(lines)
+    }[result["status"]]
+    return f"{WATCHES[0]['telegram_label']} — {phrase}."
 
 
 def build_availability_alert(result, now_utc=None):
-    checked_at = as_moscow(now_utc).strftime("%d.%m.%Y %H:%M MSK")
-    available_names = [
-        ticket["name"]
-        for ticket in result.get("matched_tickets", [])
-        if ticket.get("active")
-        and not ticket.get("hidden")
-        and isinstance(ticket.get("remaining"), int)
-        and ticket["remaining"] > 0
-    ]
-    lines = [
-        f"{result['alert_title']}: БИЛЕТ ЕСТЬ",
-        f"Категория: {result['category']}",
-        f"Доступно: {', '.join(available_names)}",
-        f"Купить: {result['checked_url']}",
-        f"Проверено: {checked_at}",
-    ]
-    return "\n".join(lines)
+    return f"{WATCHES[0]['telegram_label']} — БИЛЕТ ЕСТЬ."
 
 
 def should_send_alert(result):
@@ -403,7 +339,6 @@ def run(
                 result = check_target(watch, old_watch, fetcher=fetcher)
             except Exception as exc:
                 result = failed_result(watch, old_watch, exc)
-        result["alert_title"] = watch["alert_title"]
         results.append(result)
 
     today_msk = as_moscow(now_utc).date().isoformat()
