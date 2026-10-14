@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "checked_at_utc": "2026-10-14T05:02:35.474000+00:00",
+  "checked_at_utc": "2026-10-14T08:02:56.606840+00:00",
   "last_daily_receipt_date_msk": "2026-10-13",
   "watches": {
     "seoul_open_men": {
@@ -42,7 +42,7 @@
       "checked_url": "https://china.hyrox.com/checkout/6a6894ffeb4d87c71f1d77a6",
       "http_status": 200,
       "status": "unavailable",
-      "sale_status": "onSale",
+      "sale_status": "past",
       "category_verified": true,
       "matched_tickets": [
         {
@@ -53,7 +53,7 @@
           "remaining": 0
         }
       ],
-      "content_hash": "d8d7ed6379c3861cfe8c19958c6eb4286c534719904c3d9e6ad8a9e7e749334b",
+      "content_hash": "571bb18c17802e84f7159c070a053728484cb28aa8ecca5ccf7f53476ea5c805",
       "previous_status": "unavailable",
       "check_ok": true,
       "error": null
