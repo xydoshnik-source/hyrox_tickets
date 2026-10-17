@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "checked_at_utc": "2026-10-16T22:11:11.762783+00:00",
+  "checked_at_utc": "2026-10-17T00:10:11.363213+00:00",
   "last_daily_receipt_date_msk": "2026-10-16",
   "watches": {
     "seoul_open_men": {
@@ -26,10 +26,10 @@
           "name": "HYROX MEN 남자 오픈 | Friday",
           "active": true,
           "hidden": false,
-          "remaining": -47
+          "remaining": -46
         }
       ],
-      "content_hash": "2836d9a5defca08607a7896d8faa3e53dee095d8a0b8f4580b103cb8dfb5f464",
+      "content_hash": "f6b6338fedaeed9d89ecfe3277a730cc7b8377f2dbfabc9d59ef167e4a09d346",
       "previous_status": "unavailable",
       "check_ok": true,
       "error": null
