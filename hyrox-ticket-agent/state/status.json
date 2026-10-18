@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
-  "checked_at_utc": "2026-10-18T09:30:53.017372+00:00",
-  "last_daily_receipt_date_msk": "2026-10-17",
+  "checked_at_utc": "2026-10-18T12:10:18.343710+00:00",
+  "last_daily_receipt_date_msk": "2026-10-18",
   "watches": {
     "seoul_open_men": {
       "id": "seoul_open_men",
