@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
-  "checked_at_utc": "2026-09-20T03:33:47.728034+00:00",
-  "last_daily_receipt_date_msk": "2026-09-19",
+  "checked_at_utc": "2026-10-26T11:00:40.533904+00:00",
+  "last_daily_receipt_date_msk": "2026-10-25",
   "watches": {
     "seoul_open_men": {
       "id": "seoul_open_men",
@@ -17,19 +17,19 @@
         {
           "id": "69fafdfb399575a4b3569299",
           "name": "HYROX MEN 남자 오픈 | Saturday",
-          "active": true,
+          "active": false,
           "hidden": false,
-          "remaining": -23
+          "remaining": -173
         },
         {
           "id": "6a4e54774806215df3f7d186",
           "name": "HYROX MEN 남자 오픈 | Friday",
-          "active": true,
+          "active": false,
           "hidden": false,
-          "remaining": -3
+          "remaining": -44
         }
       ],
-      "content_hash": "340c8f10985a9ead8802b30e3040be3ef00103c15d187fc86038914b8428b631",
+      "content_hash": "f4afd08ed3848456e212741a3933f2526af8b4d81aa74e3e59ec100efe4110a0",
       "previous_status": "unavailable",
       "check_ok": true,
       "error": null
