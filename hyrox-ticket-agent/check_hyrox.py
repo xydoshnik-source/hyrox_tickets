@@ -48,19 +48,6 @@ WATCHES = [
         "target_key": "SOLO_OPEN_M",
         "telegram_label": "Seoul",
     },
-    {
-        "id": "shanghai_open_men",
-        "name": "HYROX Shanghai",
-        "date_label": "31 October - 1 November 2026",
-        "category_label": "Men's Open Singles / HYROX MEN",
-        "checkout_url": env(
-            "SHANGHAI_OPEN_MEN_CHECKOUT_URL",
-            "https://china.hyrox.com/checkout/6a6894ffeb4d87c71f1d77a6",
-        ),
-        "expected_event_pattern": r"\bHYROX\s+Shanghai\b",
-        "target_key": "SOLO_OPEN_M",
-        "telegram_label": "Shanghai",
-    },
 ]
 
 

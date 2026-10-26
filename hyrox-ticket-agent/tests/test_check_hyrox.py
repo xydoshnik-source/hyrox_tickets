@@ -10,10 +10,8 @@ SPEC = importlib.util.spec_from_file_location("check_hyrox", MODULE_PATH)
 AGENT = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(AGENT)
 SEOUL = AGENT.WATCHES[0]
-SHANGHAI = AGENT.WATCHES[1]
 EVENT_NAMES = {
     "seoul_open_men": "AirAsia | HYROX Seoul | Season 26/27",
-    "shanghai_open_men": "ZhongAn HYROX Shanghai | Season 26/27",
 }
 
 
@@ -100,33 +98,10 @@ class CheckoutParsingTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "unexpected event"):
             AGENT.classify_checkout(
                 AGENT.parse_checkout_page(
-                    checkout_html([target_ticket(remaining=2)], event_name="HYROX Shanghai")
+                    checkout_html([target_ticket(remaining=2)], event_name="HYROX Bangkok")
                 ),
                 SEOUL,
             )
-
-
-    def test_shanghai_uses_exact_open_men_category_and_inventory(self):
-        event = AGENT.parse_checkout_page(
-            checkout_html(
-                [target_ticket("HYROX MEN | Saturday", remaining=3)],
-                event_name=EVENT_NAMES[SHANGHAI["id"]],
-            )
-        )
-        result = AGENT.classify_checkout(event, SHANGHAI)
-        self.assertEqual(result["status"], "available")
-        self.assertEqual(result["matched_tickets"][0]["remaining"], 3)
-
-    def test_shanghai_general_registration_is_not_proof_of_target_availability(self):
-        tickets = [
-            target_ticket("HYROX DOUBLES MIXED | Saturday", remaining=30),
-            target_ticket("HYROX MEN PRO | Saturday", remaining=30),
-        ]
-        event = AGENT.parse_checkout_page(
-            checkout_html(tickets, event_name=EVENT_NAMES[SHANGHAI["id"]])
-        )
-        with self.assertRaisesRegex(ValueError, "exact Men's Open Singles"):
-            AGENT.classify_checkout(event, SHANGHAI)
 
 
 class NotificationTests(unittest.TestCase):
@@ -150,12 +125,10 @@ class NotificationTests(unittest.TestCase):
         )
 
         self.assertEqual(state["watches"]["seoul_open_men"]["status"], "check_failed")
-        self.assertEqual(state["watches"]["shanghai_open_men"]["status"], "check_failed")
         self.assertEqual(len(sent), 1)
-        self.assertEqual(sent[0][0], "Seoul — ошибка проверки. Shanghai — ошибка проверки.")
+        self.assertEqual(sent[0][0], "Seoul — ошибка проверки.")
         self.assertNotIn("TimeoutError", sent[0][0])
         self.assertNotIn(SEOUL["checkout_url"], sent[0][0])
-        self.assertNotIn(SHANGHAI["checkout_url"], sent[0][0])
 
     def test_broken_state_is_reported_as_a_failed_check(self):
         sent = []
@@ -173,28 +146,7 @@ class NotificationTests(unittest.TestCase):
         )
 
         self.assertEqual(state["watches"]["seoul_open_men"]["status"], "check_failed")
-        self.assertEqual(state["watches"]["shanghai_open_men"]["status"], "check_failed")
-        self.assertEqual(sent[0], "Seoul — ошибка проверки. Shanghai — ошибка проверки.")
-
-    def test_one_city_failure_does_not_hide_the_other_city_status(self):
-        sent = []
-
-        def fetcher(url):
-            watch = watch_for_url(url)
-            if watch["id"] == "shanghai_open_men":
-                raise TimeoutError("Shanghai timed out")
-            return fetched(watch, [target_ticket(remaining=0)])
-
-        AGENT.run(
-            now_utc=dt.datetime(2026, 9, 13, 7, 36, tzinfo=dt.timezone.utc),
-            fetcher=fetcher,
-            sender=lambda text, preview=False: sent.append(text),
-            state_loader=lambda: {},
-            state_saver=lambda _value: None,
-            send_daily=True,
-        )
-
-        self.assertEqual(sent, ["Seoul — нет. Shanghai — ошибка проверки."])
+        self.assertEqual(sent[0], "Seoul — ошибка проверки.")
 
     def test_daily_receipt_is_sent_only_once_per_moscow_date(self):
         sent = []
@@ -216,7 +168,7 @@ class NotificationTests(unittest.TestCase):
         AGENT.run(now + dt.timedelta(hours=1), fetcher, sender, loader, saver, send_daily=True)
 
         self.assertEqual(len(sent), 1)
-        self.assertEqual(sent[0][0], "Seoul — нет. Shanghai — нет.")
+        self.assertEqual(sent[0][0], "Seoul — нет.")
         self.assertNotIn("\n", sent[0][0])
 
     def test_new_availability_sends_alert_and_separate_receipt(self):
@@ -224,7 +176,6 @@ class NotificationTests(unittest.TestCase):
         previous = {
             "watches": {
                 "seoul_open_men": {"status": "unavailable"},
-                "shanghai_open_men": {"status": "unavailable"},
             },
             "last_daily_receipt_date_msk": None,
         }
@@ -236,7 +187,7 @@ class NotificationTests(unittest.TestCase):
             now_utc=dt.datetime(2026, 9, 13, 7, 36, tzinfo=dt.timezone.utc),
             fetcher=lambda url: fetched(
                 watch_for_url(url),
-                [target_ticket(remaining=2 if "china.hyrox.com" in url else 0)],
+                [target_ticket(remaining=2)],
             ),
             sender=sender,
             state_loader=lambda: previous,
@@ -245,7 +196,7 @@ class NotificationTests(unittest.TestCase):
         )
 
         self.assertEqual(len(sent), 2)
-        expected = "Seoul — нет. Shanghai — БИЛЕТ ЕСТЬ."
+        expected = "Seoul — БИЛЕТ ЕСТЬ."
         self.assertEqual(sent[0][0], expected)
         self.assertFalse(sent[0][1])
         self.assertEqual(sent[1][0], expected)
@@ -258,7 +209,6 @@ class NotificationTests(unittest.TestCase):
         previous = {
             "watches": {
                 "seoul_open_men": {"status": "available"},
-                "shanghai_open_men": {"status": "available"},
             },
             "last_daily_receipt_date_msk": "2026-09-13",
         }
