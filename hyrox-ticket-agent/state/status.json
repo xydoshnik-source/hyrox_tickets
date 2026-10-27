@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
-  "checked_at_utc": "2026-10-27T10:51:35.367711+00:00",
-  "last_daily_receipt_date_msk": "2026-10-26",
+  "checked_at_utc": "2026-10-27T13:32:00.803877+00:00",
+  "last_daily_receipt_date_msk": "2026-10-27",
   "watches": {
     "seoul_open_men": {
       "id": "seoul_open_men",
@@ -68,7 +68,7 @@
         }
       ],
       "content_hash": "7054e84fe0aedafa0e36b1d69ce6bcfa81491b87d178975384a83efd5aa205cd",
-      "previous_status": null,
+      "previous_status": "unavailable",
       "check_ok": true,
       "error": null
     }
