@@ -10,8 +10,10 @@ SPEC = importlib.util.spec_from_file_location("check_hyrox", MODULE_PATH)
 AGENT = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(AGENT)
 SEOUL = AGENT.WATCHES[0]
+KUALA_LUMPUR = AGENT.WATCHES[1]
 EVENT_NAMES = {
     "seoul_open_men": "AirAsia | HYROX Seoul | Season 26/27",
+    "kuala_lumpur_open_men": "AirAsia | HYROX Kuala Lumpur | Season 26/27",
 }
 
 
@@ -103,6 +105,25 @@ class CheckoutParsingTests(unittest.TestCase):
                 SEOUL,
             )
 
+    def test_kuala_lumpur_uses_exact_open_men_category_and_inventory(self):
+        event = AGENT.parse_checkout_page(
+            checkout_html(
+                [target_ticket("HYROX MEN | Thursday", remaining=3)],
+                event_name=EVENT_NAMES[KUALA_LUMPUR["id"]],
+            )
+        )
+        result = AGENT.classify_checkout(event, KUALA_LUMPUR)
+        self.assertEqual(result["status"], "available")
+        self.assertEqual(result["matched_tickets"][0]["remaining"], 3)
+
+    def test_kuala_lumpur_partner_ticket_is_not_target_availability(self):
+        ticket = target_ticket("KLOOK | HYROX MEN | Thursday", remaining=8, active=False)
+        event = AGENT.parse_checkout_page(
+            checkout_html([ticket], event_name=EVENT_NAMES[KUALA_LUMPUR["id"]])
+        )
+        with self.assertRaisesRegex(ValueError, "exact Men's Open Singles"):
+            AGENT.classify_checkout(event, KUALA_LUMPUR)
+
 
 class NotificationTests(unittest.TestCase):
     def test_failed_daily_check_sends_explicit_error_receipt(self):
@@ -125,10 +146,15 @@ class NotificationTests(unittest.TestCase):
         )
 
         self.assertEqual(state["watches"]["seoul_open_men"]["status"], "check_failed")
+        self.assertEqual(state["watches"]["kuala_lumpur_open_men"]["status"], "check_failed")
         self.assertEqual(len(sent), 1)
-        self.assertEqual(sent[0][0], "Seoul — ошибка проверки.")
+        self.assertEqual(
+            sent[0][0],
+            "Seoul — ошибка проверки. Kuala Lumpur — ошибка проверки.",
+        )
         self.assertNotIn("TimeoutError", sent[0][0])
         self.assertNotIn(SEOUL["checkout_url"], sent[0][0])
+        self.assertNotIn(KUALA_LUMPUR["checkout_url"], sent[0][0])
 
     def test_broken_state_is_reported_as_a_failed_check(self):
         sent = []
@@ -146,7 +172,31 @@ class NotificationTests(unittest.TestCase):
         )
 
         self.assertEqual(state["watches"]["seoul_open_men"]["status"], "check_failed")
-        self.assertEqual(sent[0], "Seoul — ошибка проверки.")
+        self.assertEqual(state["watches"]["kuala_lumpur_open_men"]["status"], "check_failed")
+        self.assertEqual(
+            sent[0],
+            "Seoul — ошибка проверки. Kuala Lumpur — ошибка проверки.",
+        )
+
+    def test_one_city_failure_does_not_hide_the_other_city_status(self):
+        sent = []
+
+        def fetcher(url):
+            watch = watch_for_url(url)
+            if watch["id"] == "kuala_lumpur_open_men":
+                raise TimeoutError("Kuala Lumpur timed out")
+            return fetched(watch, [target_ticket(remaining=0)])
+
+        AGENT.run(
+            now_utc=dt.datetime(2026, 9, 13, 7, 36, tzinfo=dt.timezone.utc),
+            fetcher=fetcher,
+            sender=lambda text, preview=False: sent.append(text),
+            state_loader=lambda: {},
+            state_saver=lambda _value: None,
+            send_daily=True,
+        )
+
+        self.assertEqual(sent, ["Seoul — нет. Kuala Lumpur — ошибка проверки."])
 
     def test_daily_receipt_is_sent_only_once_per_moscow_date(self):
         sent = []
@@ -168,7 +218,7 @@ class NotificationTests(unittest.TestCase):
         AGENT.run(now + dt.timedelta(hours=1), fetcher, sender, loader, saver, send_daily=True)
 
         self.assertEqual(len(sent), 1)
-        self.assertEqual(sent[0][0], "Seoul — нет.")
+        self.assertEqual(sent[0][0], "Seoul — нет. Kuala Lumpur — нет.")
         self.assertNotIn("\n", sent[0][0])
 
     def test_new_availability_sends_alert_and_separate_receipt(self):
@@ -176,6 +226,7 @@ class NotificationTests(unittest.TestCase):
         previous = {
             "watches": {
                 "seoul_open_men": {"status": "unavailable"},
+                "kuala_lumpur_open_men": {"status": "unavailable"},
             },
             "last_daily_receipt_date_msk": None,
         }
@@ -187,7 +238,12 @@ class NotificationTests(unittest.TestCase):
             now_utc=dt.datetime(2026, 9, 13, 7, 36, tzinfo=dt.timezone.utc),
             fetcher=lambda url: fetched(
                 watch_for_url(url),
-                [target_ticket(remaining=2)],
+                [
+                    target_ticket(
+                        "HYROX MEN | Thursday",
+                        remaining=2 if "malaysia.hyrox.com" in url else 0,
+                    )
+                ],
             ),
             sender=sender,
             state_loader=lambda: previous,
@@ -196,7 +252,7 @@ class NotificationTests(unittest.TestCase):
         )
 
         self.assertEqual(len(sent), 2)
-        expected = "Seoul — БИЛЕТ ЕСТЬ."
+        expected = "Seoul — нет. Kuala Lumpur — БИЛЕТ ЕСТЬ."
         self.assertEqual(sent[0][0], expected)
         self.assertFalse(sent[0][1])
         self.assertEqual(sent[1][0], expected)
@@ -209,6 +265,7 @@ class NotificationTests(unittest.TestCase):
         previous = {
             "watches": {
                 "seoul_open_men": {"status": "available"},
+                "kuala_lumpur_open_men": {"status": "available"},
             },
             "last_daily_receipt_date_msk": "2026-09-13",
         }

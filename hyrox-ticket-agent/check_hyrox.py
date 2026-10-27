@@ -48,6 +48,19 @@ WATCHES = [
         "target_key": "SOLO_OPEN_M",
         "telegram_label": "Seoul",
     },
+    {
+        "id": "kuala_lumpur_open_men",
+        "name": "AirAsia HYROX Kuala Lumpur",
+        "date_label": "10-13 December 2026",
+        "category_label": "Men's Open Singles / HYROX MEN",
+        "checkout_url": env(
+            "KUALA_LUMPUR_OPEN_MEN_CHECKOUT_URL",
+            "https://malaysia.hyrox.com/checkout/6a3e77e782e963fd28e1beeb",
+        ),
+        "expected_event_pattern": r"\bHYROX\s+Kuala\s+Lumpur\b",
+        "target_key": "SOLO_OPEN_M",
+        "telegram_label": "Kuala Lumpur",
+    },
 ]
 
 

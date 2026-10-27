@@ -1,9 +1,10 @@
-# HYROX Seoul Ticket Watcher
+# HYROX Seoul and Kuala Lumpur Ticket Watcher
 
-Бот следит за одним событием:
+Бот следит за двумя событиями в одной категории:
 
 - `AirAsia | HYROX Seoul | Season 26/27`, `13-15 November 2026`;
-- категория: `Men's Open Singles / HYROX MEN`.
+- `AirAsia | HYROX Kuala Lumpur | Season 26/27`, `10-13 December 2026`;
+- категория в обоих случаях: `Men's Open Singles / HYROX MEN`.
 
 `Doubles`, `Mixed`, `Pro`, `Relay`, `Adaptive` и женские категории не проверяются.
 
@@ -28,11 +29,11 @@ GitHub Actions запускает реальную проверку 10 раз в
 - Ручной запуск может отправить отдельную тестовую квитанцию.
 - Изменение кода проверки запускает одну тестовую квитанцию; state-коммиты этого не делают.
 
-Каждое Telegram-сообщение состоит из одной строки со статусом Сеула, например:
+Каждое Telegram-сообщение состоит из одной строки со статусом обоих городов, например:
 
-- `Seoul — нет.`;
-- `Seoul — БИЛЕТ ЕСТЬ.`;
-- `Seoul — ошибка проверки.`
+- `Seoul — нет. Kuala Lumpur — нет.`;
+- `Seoul — нет. Kuala Lumpur — БИЛЕТ ЕСТЬ.`;
+- `Seoul — нет. Kuala Lumpur — ошибка проверки.`
 
 URL, время, остатки и ошибки остаются только в state-файле и логах GitHub Actions.
 
@@ -62,4 +63,4 @@ python3 -m unittest discover -s hyrox-ticket-agent/tests -v
 python3 -m py_compile hyrox-ticket-agent/check_hyrox.py
 ```
 
-Текущее состояние отслеживаемого события хранится в `hyrox-ticket-agent/state/status.json`.
+Текущее состояние обоих отслеживаемых событий хранится в `hyrox-ticket-agent/state/status.json`.
