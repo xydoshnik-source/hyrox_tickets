@@ -9,44 +9,32 @@ import re
 import sys
 import urllib.error
 import urllib.request
-from zoneinfo import ZoneInfo
 
 
 ROOT = pathlib.Path(__file__).resolve().parent
 STATE_DIR = ROOT / "state"
 STATE_PATH = STATE_DIR / "status.json"
-REPORT_TZ = ZoneInfo("Europe/Moscow")
 
 
 def env(name, default=""):
     return os.getenv(name, default).strip()
 
 
-def env_bool(name, default=False):
-    value = env(name)
-    if not value:
-        return default
-    return value.lower() in {"1", "true", "yes", "on"}
-
-
 TELEGRAM_BOT_TOKEN = env("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = env("TELEGRAM_CHAT_ID")
-SEND_DAILY_RECEIPT = env_bool("SEND_DAILY_RECEIPT")
-FORCE_DAILY_RECEIPT = env_bool("FORCE_DAILY_RECEIPT") or env_bool("FORCE_STATUS_REPORT")
-
 WATCHES = [
     {
-        "id": "seoul_open_men",
-        "name": "HYROX Seoul",
-        "date_label": "13-15 November 2026",
+        "id": "singapore_open_men",
+        "name": "AIA HYROX Singapore",
+        "date_label": "26-29 November 2026",
         "category_label": "Men's Open Singles / HYROX MEN",
         "checkout_url": env(
-            "SEOUL_OPEN_MEN_CHECKOUT_URL",
-            "https://korea.hyrox.com/checkout/69fafdfb5e85aa5b5e0ae5a1",
+            "SINGAPORE_OPEN_MEN_CHECKOUT_URL",
+            "https://singapore.hyrox.com/checkout/6a0d6268d682a54c29154ee8",
         ),
-        "expected_event_pattern": r"\bHYROX\s+Seoul\b",
+        "expected_event_pattern": r"\bHYROX\s+Singapore\b",
         "target_key": "SOLO_OPEN_M",
-        "telegram_label": "Seoul",
+        "telegram_label": "Singapore",
     },
     {
         "id": "kuala_lumpur_open_men",
@@ -206,9 +194,6 @@ def previous_watches(previous):
     watches = previous.get("watches")
     if isinstance(watches, dict):
         return watches
-    old_watch = previous.get("watch")
-    if isinstance(old_watch, dict):
-        return {"seoul_open_men": old_watch}
     return {}
 
 
@@ -296,31 +281,17 @@ def send_telegram(text, preview=False):
     print(f"Telegram accepted message_id={message_id}")
 
 
-def as_moscow(now_utc=None):
-    now_utc = now_utc or dt.datetime.now(dt.timezone.utc)
-    if now_utc.tzinfo is None:
-        now_utc = now_utc.replace(tzinfo=dt.timezone.utc)
-    return now_utc.astimezone(REPORT_TZ)
-
-
-def build_status_message(results):
-    labels = {watch["id"]: watch["telegram_label"] for watch in WATCHES}
-    phrases = {
-        "available": "БИЛЕТ ЕСТЬ",
-        "unavailable": "нет",
-        "check_failed": "ошибка проверки",
-    }
-    return " ".join(
-        f"{labels[result['id']]} — {phrases[result['status']]}." for result in results
-    )
-
-
-def build_daily_receipt(results, now_utc=None):
-    return build_status_message(results)
-
-
 def build_availability_alert(results, now_utc=None):
-    return build_status_message(results)
+    lines = ["БИЛЕТ ПОЯВИЛСЯ"]
+    for result in results:
+        lines.extend(
+            [
+                f"{result['event']} — {result['date']}",
+                "Категория: Men's Open Singles / HYROX MEN",
+                f"Покупать: {result['checked_url']}",
+            ]
+        )
+    return "\n".join(lines)
 
 
 def should_send_alert(result):
@@ -333,8 +304,6 @@ def run(
     sender=send_telegram,
     state_loader=load_state,
     state_saver=save_state,
-    send_daily=SEND_DAILY_RECEIPT,
-    force_receipt=FORCE_DAILY_RECEIPT,
 ):
     now_utc = now_utc or dt.datetime.now(dt.timezone.utc)
     state_error = None
@@ -360,24 +329,13 @@ def run(
                 result = failed_result(watch, old_watch, exc)
         results.append(result)
 
-    today_msk = as_moscow(now_utc).date().isoformat()
-    last_receipt = previous.get("last_daily_receipt_date_msk")
-    if last_receipt is None:
-        last_receipt = previous.get("last_daily_report_date_msk")
-    scheduled_receipt_due = send_daily and last_receipt != today_msk
-
-    if any(should_send_alert(result) for result in results):
-        sender(build_availability_alert(results, now_utc), preview=False)
-
-    if scheduled_receipt_due or force_receipt:
-        sender(build_daily_receipt(results, now_utc), preview=False)
-        if scheduled_receipt_due:
-            last_receipt = today_msk
+    newly_available = [result for result in results if should_send_alert(result)]
+    if newly_available:
+        sender(build_availability_alert(newly_available, now_utc), preview=False)
 
     state = {
         "schema_version": 3,
         "checked_at_utc": now_utc.astimezone(dt.timezone.utc).isoformat(),
-        "last_daily_receipt_date_msk": last_receipt,
         "watches": {result["id"]: result for result in results},
     }
     state_saver(state)

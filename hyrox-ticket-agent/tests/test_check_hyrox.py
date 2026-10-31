@@ -9,15 +9,15 @@ MODULE_PATH = pathlib.Path(__file__).resolve().parents[1] / "check_hyrox.py"
 SPEC = importlib.util.spec_from_file_location("check_hyrox", MODULE_PATH)
 AGENT = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(AGENT)
-SEOUL = AGENT.WATCHES[0]
+SINGAPORE = AGENT.WATCHES[0]
 KUALA_LUMPUR = AGENT.WATCHES[1]
 EVENT_NAMES = {
-    "seoul_open_men": "AirAsia | HYROX Seoul | Season 26/27",
+    "singapore_open_men": "HYROX Singapore II | Season 26/27",
     "kuala_lumpur_open_men": "AirAsia | HYROX Kuala Lumpur | Season 26/27",
 }
 
 
-def checkout_html(tickets, sale_status="onSale", event_name="AirAsia | HYROX Seoul | Season 26/27"):
+def checkout_html(tickets, sale_status="onSale", event_name="HYROX Singapore II | Season 26/27"):
     data = {
         "props": {
             "pageProps": {
@@ -67,7 +67,7 @@ class CheckoutParsingTests(unittest.TestCase):
     def test_available_only_when_exact_target_has_positive_inventory(self):
         result = AGENT.classify_checkout(
             AGENT.parse_checkout_page(checkout_html([target_ticket(remaining=3)])),
-            SEOUL,
+            SINGAPORE,
         )
         self.assertEqual(result["status"], "available")
         self.assertEqual(result["matched_tickets"][0]["remaining"], 3)
@@ -77,7 +77,7 @@ class CheckoutParsingTests(unittest.TestCase):
             target_ticket("HYROX MEN 남자 오픈 | Friday", remaining=-4),
             target_ticket("HYROX MEN 남자 오픈 | Saturday", remaining=-21),
         ]
-        result = AGENT.classify_checkout(AGENT.parse_checkout_page(checkout_html(tickets)), SEOUL)
+        result = AGENT.classify_checkout(AGENT.parse_checkout_page(checkout_html(tickets)), SINGAPORE)
         self.assertEqual(result["status"], "unavailable")
 
     def test_doubles_pro_mixed_and_bad_partner_metadata_are_rejected(self):
@@ -88,13 +88,13 @@ class CheckoutParsingTests(unittest.TestCase):
             target_ticket("KLOOK | HYROX WOMEN | Friday", remaining=8),
         ]
         with self.assertRaisesRegex(ValueError, "exact Men's Open Singles"):
-            AGENT.classify_checkout(AGENT.parse_checkout_page(checkout_html(tickets)), SEOUL)
+            AGENT.classify_checkout(AGENT.parse_checkout_page(checkout_html(tickets)), SINGAPORE)
 
     def test_missing_inventory_fails_instead_of_claiming_no_tickets(self):
         ticket = target_ticket()
         ticket.pop("v")
         with self.assertRaisesRegex(ValueError, "did not return inventory"):
-            AGENT.classify_checkout(AGENT.parse_checkout_page(checkout_html([ticket])), SEOUL)
+            AGENT.classify_checkout(AGENT.parse_checkout_page(checkout_html([ticket])), SINGAPORE)
 
     def test_wrong_event_fails_closed(self):
         with self.assertRaisesRegex(ValueError, "unexpected event"):
@@ -102,7 +102,7 @@ class CheckoutParsingTests(unittest.TestCase):
                 AGENT.parse_checkout_page(
                     checkout_html([target_ticket(remaining=2)], event_name="HYROX Bangkok")
                 ),
-                SEOUL,
+                SINGAPORE,
             )
 
     def test_kuala_lumpur_uses_exact_open_men_category_and_inventory(self):
@@ -126,116 +126,45 @@ class CheckoutParsingTests(unittest.TestCase):
 
 
 class NotificationTests(unittest.TestCase):
-    def test_failed_daily_check_sends_explicit_error_receipt(self):
+    def test_unavailable_tickets_are_silent(self):
         sent = []
-        stored = {}
-
-        def fail_fetch(_url):
-            raise TimeoutError("checkout timed out")
-
-        def sender(text, preview=False):
-            sent.append((text, preview))
-
         state = AGENT.run(
-            now_utc=dt.datetime(2026, 9, 13, 7, 36, tzinfo=dt.timezone.utc),
-            fetcher=fail_fetch,
-            sender=sender,
-            state_loader=lambda: {},
-            state_saver=lambda value: stored.update(value),
-            send_daily=True,
-        )
-
-        self.assertEqual(state["watches"]["seoul_open_men"]["status"], "check_failed")
-        self.assertEqual(state["watches"]["kuala_lumpur_open_men"]["status"], "check_failed")
-        self.assertEqual(len(sent), 1)
-        self.assertEqual(
-            sent[0][0],
-            "Seoul — ошибка проверки. Kuala Lumpur — ошибка проверки.",
-        )
-        self.assertNotIn("TimeoutError", sent[0][0])
-        self.assertNotIn(SEOUL["checkout_url"], sent[0][0])
-        self.assertNotIn(KUALA_LUMPUR["checkout_url"], sent[0][0])
-
-    def test_broken_state_is_reported_as_a_failed_check(self):
-        sent = []
-
-        def broken_loader():
-            raise ValueError("invalid state JSON")
-
-        state = AGENT.run(
-            now_utc=dt.datetime(2026, 9, 13, 7, 36, tzinfo=dt.timezone.utc),
-            fetcher=lambda url: fetched(watch_for_url(url), [target_ticket(remaining=1)]),
-            sender=lambda text, preview=False: sent.append(text),
-            state_loader=broken_loader,
-            state_saver=lambda _value: None,
-            send_daily=True,
-        )
-
-        self.assertEqual(state["watches"]["seoul_open_men"]["status"], "check_failed")
-        self.assertEqual(state["watches"]["kuala_lumpur_open_men"]["status"], "check_failed")
-        self.assertEqual(
-            sent[0],
-            "Seoul — ошибка проверки. Kuala Lumpur — ошибка проверки.",
-        )
-
-    def test_one_city_failure_does_not_hide_the_other_city_status(self):
-        sent = []
-
-        def fetcher(url):
-            watch = watch_for_url(url)
-            if watch["id"] == "kuala_lumpur_open_men":
-                raise TimeoutError("Kuala Lumpur timed out")
-            return fetched(watch, [target_ticket(remaining=0)])
-
-        AGENT.run(
-            now_utc=dt.datetime(2026, 9, 13, 7, 36, tzinfo=dt.timezone.utc),
-            fetcher=fetcher,
-            sender=lambda text, preview=False: sent.append(text),
+            now_utc=dt.datetime(2026, 10, 31, 0, 0, tzinfo=dt.timezone.utc),
+            fetcher=lambda url: fetched(watch_for_url(url), [target_ticket(remaining=0)]),
+            sender=lambda text, preview=False: sent.append((text, preview)),
             state_loader=lambda: {},
             state_saver=lambda _value: None,
-            send_daily=True,
         )
 
-        self.assertEqual(sent, ["Seoul — нет. Kuala Lumpur — ошибка проверки."])
+        self.assertEqual(state["watches"]["singapore_open_men"]["status"], "unavailable")
+        self.assertEqual(state["watches"]["kuala_lumpur_open_men"]["status"], "unavailable")
+        self.assertEqual(sent, [])
 
-    def test_daily_receipt_is_sent_only_once_per_moscow_date(self):
+    def test_failed_checks_are_silent(self):
         sent = []
-        store = {}
+        state = AGENT.run(
+            now_utc=dt.datetime(2026, 10, 31, 0, 0, tzinfo=dt.timezone.utc),
+            fetcher=lambda _url: (_ for _ in ()).throw(TimeoutError("checkout timed out")),
+            sender=lambda text, preview=False: sent.append((text, preview)),
+            state_loader=lambda: {},
+            state_saver=lambda _value: None,
+        )
 
-        def loader():
-            return dict(store)
+        self.assertEqual(state["watches"]["singapore_open_men"]["status"], "check_failed")
+        self.assertEqual(state["watches"]["kuala_lumpur_open_men"]["status"], "check_failed")
+        self.assertEqual(sent, [])
 
-        def saver(value):
-            store.clear()
-            store.update(value)
-
-        def sender(text, preview=False):
-            sent.append((text, preview))
-
-        fetcher = lambda url: fetched(watch_for_url(url), [target_ticket(remaining=0)])
-        now = dt.datetime(2026, 9, 13, 7, 36, tzinfo=dt.timezone.utc)
-        AGENT.run(now, fetcher, sender, loader, saver, send_daily=True)
-        AGENT.run(now + dt.timedelta(hours=1), fetcher, sender, loader, saver, send_daily=True)
-
-        self.assertEqual(len(sent), 1)
-        self.assertEqual(sent[0][0], "Seoul — нет. Kuala Lumpur — нет.")
-        self.assertNotIn("\n", sent[0][0])
-
-    def test_new_availability_sends_alert_and_separate_receipt(self):
+    def test_new_availability_sends_only_the_available_event(self):
         sent = []
         previous = {
             "watches": {
-                "seoul_open_men": {"status": "unavailable"},
+                "singapore_open_men": {"status": "unavailable"},
                 "kuala_lumpur_open_men": {"status": "unavailable"},
-            },
-            "last_daily_receipt_date_msk": None,
+            }
         }
 
-        def sender(text, preview=False):
-            sent.append((text, preview))
-
         AGENT.run(
-            now_utc=dt.datetime(2026, 9, 13, 7, 36, tzinfo=dt.timezone.utc),
+            now_utc=dt.datetime(2026, 10, 31, 0, 0, tzinfo=dt.timezone.utc),
             fetcher=lambda url: fetched(
                 watch_for_url(url),
                 [
@@ -245,37 +174,32 @@ class NotificationTests(unittest.TestCase):
                     )
                 ],
             ),
-            sender=sender,
+            sender=lambda text, preview=False: sent.append((text, preview)),
             state_loader=lambda: previous,
             state_saver=lambda _value: None,
-            send_daily=True,
         )
 
-        self.assertEqual(len(sent), 2)
-        expected = "Seoul — нет. Kuala Lumpur — БИЛЕТ ЕСТЬ."
-        self.assertEqual(sent[0][0], expected)
+        self.assertEqual(len(sent), 1)
+        self.assertIn("БИЛЕТ ПОЯВИЛСЯ", sent[0][0])
+        self.assertIn("Kuala Lumpur", sent[0][0])
+        self.assertIn(KUALA_LUMPUR["checkout_url"], sent[0][0])
+        self.assertNotIn("Singapore", sent[0][0])
         self.assertFalse(sent[0][1])
-        self.assertEqual(sent[1][0], expected)
-        self.assertFalse(sent[1][1])
-        self.assertNotIn("\n", sent[0][0])
-        self.assertNotIn("\n", sent[1][0])
 
     def test_unchanged_available_status_does_not_repeat_alert(self):
         sent = []
         previous = {
             "watches": {
-                "seoul_open_men": {"status": "available"},
+                "singapore_open_men": {"status": "available"},
                 "kuala_lumpur_open_men": {"status": "available"},
-            },
-            "last_daily_receipt_date_msk": "2026-09-13",
+            }
         }
         AGENT.run(
-            now_utc=dt.datetime(2026, 9, 13, 9, 0, tzinfo=dt.timezone.utc),
+            now_utc=dt.datetime(2026, 10, 31, 1, 0, tzinfo=dt.timezone.utc),
             fetcher=lambda url: fetched(watch_for_url(url), [target_ticket(remaining=2)]),
             sender=lambda text, preview=False: sent.append((text, preview)),
             state_loader=lambda: previous,
             state_saver=lambda _value: None,
-            send_daily=False,
         )
         self.assertEqual(sent, [])
 

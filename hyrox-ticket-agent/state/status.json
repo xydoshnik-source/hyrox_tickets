@@ -1,36 +1,42 @@
 {
   "schema_version": 3,
-  "checked_at_utc": "2026-10-27T10:51:35.367711+00:00",
-  "last_daily_receipt_date_msk": "2026-10-26",
+  "checked_at_utc": "2026-10-31T13:00:05.569044+00:00",
   "watches": {
-    "seoul_open_men": {
-      "id": "seoul_open_men",
-      "event": "AirAsia | HYROX Seoul | Season 26/27",
-      "date": "13-15 November 2026",
+    "singapore_open_men": {
+      "id": "singapore_open_men",
+      "event": "HYROX Singapore II | Season 26/27",
+      "date": "26-29 November 2026",
       "category": "Men's Open Singles / HYROX MEN",
-      "checked_url": "https://korea.hyrox.com/checkout/69fafdfb5e85aa5b5e0ae5a1",
+      "checked_url": "https://singapore.hyrox.com/checkout/6a0d6268d682a54c29154ee8",
       "http_status": 200,
       "status": "unavailable",
       "sale_status": "onSale",
       "category_verified": true,
       "matched_tickets": [
         {
-          "id": "69fafdfb399575a4b3569299",
-          "name": "HYROX MEN 남자 오픈 | Saturday",
-          "active": false,
+          "id": "6a0d62680b5a75fe2b49c65e",
+          "name": "HYROX MEN | Friday",
+          "active": true,
           "hidden": false,
-          "remaining": -173
+          "remaining": -16
         },
         {
-          "id": "6a4e54774806215df3f7d186",
-          "name": "HYROX MEN 남자 오픈 | Friday",
-          "active": false,
+          "id": "6a0d62680b5a75fe2b49c668",
+          "name": "HYROX MEN | Saturday",
+          "active": true,
           "hidden": false,
-          "remaining": -45
+          "remaining": -2
+        },
+        {
+          "id": "6a277fcbb6369cc43ec28f77",
+          "name": "HYROX MEN | Thursday",
+          "active": true,
+          "hidden": false,
+          "remaining": 0
         }
       ],
-      "content_hash": "7c761621a65537acab6828f14f5bf6669abb8d1b88266aa38af32361425ec8e9",
-      "previous_status": "unavailable",
+      "content_hash": "4eedae4b94340b972373e3e05f90aa8bcfb72667292e3cafd7695e7634459356",
+      "previous_status": null,
       "check_ok": true,
       "error": null
     },
@@ -57,18 +63,18 @@
           "name": "HYROX MEN | Saturday",
           "active": true,
           "hidden": false,
-          "remaining": -11
+          "remaining": -12
         },
         {
           "id": "6a767a2afcc23cbbdc276545",
           "name": "HYROX MEN | Thursday",
           "active": true,
           "hidden": false,
-          "remaining": -1
+          "remaining": -2
         }
       ],
-      "content_hash": "7054e84fe0aedafa0e36b1d69ce6bcfa81491b87d178975384a83efd5aa205cd",
-      "previous_status": null,
+      "content_hash": "03627a3f034815994eea07917012fb0250e44c73266c34d2603cb9635004ec73",
+      "previous_status": "unavailable",
       "check_ok": true,
       "error": null
     }
