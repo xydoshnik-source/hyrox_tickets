@@ -36,7 +36,7 @@
         }
       ],
       "content_hash": "4eedae4b94340b972373e3e05f90aa8bcfb72667292e3cafd7695e7634459356",
-      "previous_status": null,
+      "previous_status": "unavailable",
       "check_ok": true,
       "error": null
     },
