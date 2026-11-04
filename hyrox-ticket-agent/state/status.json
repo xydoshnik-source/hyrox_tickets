@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "checked_at_utc": "2026-11-04T10:02:35.380189+00:00",
+  "checked_at_utc": "2026-11-04T18:18:36.288401+00:00",
   "watches": {
     "singapore_open_men": {
       "id": "singapore_open_men",
@@ -25,7 +25,7 @@
           "name": "HYROX MEN | Saturday",
           "active": true,
           "hidden": false,
-          "remaining": -2
+          "remaining": -1
         },
         {
           "id": "6a277fcbb6369cc43ec28f77",
@@ -35,7 +35,7 @@
           "remaining": -1
         }
       ],
-      "content_hash": "203de0bb2e5ebe9d098a2a0158b595eb9afcbac481bd2e6da5c6530cd95aec9f",
+      "content_hash": "61939604d490f5fdd927abaddef1b946661e5211fc86fde2a2883851ca2323d6",
       "previous_status": "unavailable",
       "check_ok": true,
       "error": null
@@ -70,10 +70,10 @@
           "name": "HYROX MEN | Thursday",
           "active": true,
           "hidden": false,
-          "remaining": -2
+          "remaining": -1
         }
       ],
-      "content_hash": "03627a3f034815994eea07917012fb0250e44c73266c34d2603cb9635004ec73",
+      "content_hash": "b12ba1cde014139a37c9f6b3b1cb7491bdb7e002f30e670c4bc5e9897d8ac472",
       "previous_status": "unavailable",
       "check_ok": true,
       "error": null
