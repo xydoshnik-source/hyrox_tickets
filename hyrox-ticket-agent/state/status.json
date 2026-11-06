@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "checked_at_utc": "2026-11-05T20:51:24.629373+00:00",
+  "checked_at_utc": "2026-11-06T01:14:16.981521+00:00",
   "watches": {
     "singapore_open_men": {
       "id": "singapore_open_men",
@@ -9,7 +9,7 @@
       "category": "Men's Open Singles / HYROX MEN",
       "checked_url": "https://singapore.hyrox.com/checkout/6a0d6268d682a54c29154ee8",
       "http_status": 200,
-      "status": "unavailable",
+      "status": "available",
       "sale_status": "onSale",
       "category_verified": true,
       "matched_tickets": [
@@ -18,24 +18,24 @@
           "name": "HYROX MEN | Friday",
           "active": true,
           "hidden": false,
-          "remaining": -16
+          "remaining": 70
         },
         {
           "id": "6a0d62680b5a75fe2b49c668",
           "name": "HYROX MEN | Saturday",
           "active": true,
           "hidden": false,
-          "remaining": 0
+          "remaining": 139
         },
         {
           "id": "6a277fcbb6369cc43ec28f77",
           "name": "HYROX MEN | Thursday",
           "active": true,
           "hidden": false,
-          "remaining": 0
+          "remaining": 62
         }
       ],
-      "content_hash": "d4004faad70912a0118fa31fcaf9dea6334251da03481afc97d32e48da8d8107",
+      "content_hash": "3e2f99a43f7238fa1a0e33a4a5131d223e0f5cb4203e496a67b1dad12b97a3ce",
       "previous_status": "unavailable",
       "check_ok": true,
       "error": null
