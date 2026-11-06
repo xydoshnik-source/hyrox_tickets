@@ -1,14 +1,6 @@
 name: HYROX Ticket Watcher
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - ".github/workflows/hyrox-ticket-agent.yml"
-      - "hyrox-ticket-agent/check_hyrox.py"
-  schedule:
-    - cron: "0 * * * *"
   workflow_dispatch:
 
 concurrency:
