@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "checked_at_utc": "2026-10-31T13:00:05.569044+00:00",
+  "checked_at_utc": "2026-11-06T01:14:16.981521+00:00",
   "watches": {
     "singapore_open_men": {
       "id": "singapore_open_men",
@@ -9,7 +9,7 @@
       "category": "Men's Open Singles / HYROX MEN",
       "checked_url": "https://singapore.hyrox.com/checkout/6a0d6268d682a54c29154ee8",
       "http_status": 200,
-      "status": "unavailable",
+      "status": "available",
       "sale_status": "onSale",
       "category_verified": true,
       "matched_tickets": [
@@ -18,24 +18,24 @@
           "name": "HYROX MEN | Friday",
           "active": true,
           "hidden": false,
-          "remaining": -16
+          "remaining": 70
         },
         {
           "id": "6a0d62680b5a75fe2b49c668",
           "name": "HYROX MEN | Saturday",
           "active": true,
           "hidden": false,
-          "remaining": -2
+          "remaining": 139
         },
         {
           "id": "6a277fcbb6369cc43ec28f77",
           "name": "HYROX MEN | Thursday",
           "active": true,
           "hidden": false,
-          "remaining": 0
+          "remaining": 62
         }
       ],
-      "content_hash": "4eedae4b94340b972373e3e05f90aa8bcfb72667292e3cafd7695e7634459356",
+      "content_hash": "3e2f99a43f7238fa1a0e33a4a5131d223e0f5cb4203e496a67b1dad12b97a3ce",
       "previous_status": "unavailable",
       "check_ok": true,
       "error": null
@@ -56,24 +56,24 @@
           "name": "HYROX MEN | Friday",
           "active": true,
           "hidden": false,
-          "remaining": -8
+          "remaining": -9
         },
         {
           "id": "6a3e77e7a9a9cd1351a1031e",
           "name": "HYROX MEN | Saturday",
           "active": true,
           "hidden": false,
-          "remaining": -12
+          "remaining": -13
         },
         {
           "id": "6a767a2afcc23cbbdc276545",
           "name": "HYROX MEN | Thursday",
           "active": true,
           "hidden": false,
-          "remaining": -2
+          "remaining": -1
         }
       ],
-      "content_hash": "03627a3f034815994eea07917012fb0250e44c73266c34d2603cb9635004ec73",
+      "content_hash": "7e42341d9c89d3b612160d8587769cb96f1ece5675580a16e58146346cec689d",
       "previous_status": "unavailable",
       "check_ok": true,
       "error": null
